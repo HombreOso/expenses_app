@@ -26,11 +26,7 @@ class _NewTransactionState extends State<NewTransaction> {
       return;
     }
 
-    widget.addTx(
-      enteredTitle,
-      enteredAmount,
-      _selectedDate,
-    );
+    widget.addTx(enteredTitle, enteredAmount, _selectedDate, "Food");
 
     Navigator.of(context).pop();
   }
@@ -92,7 +88,7 @@ class _NewTransactionState extends State<NewTransaction> {
                       foregroundColor: MaterialStateProperty.all(
                           Theme.of(context).primaryColor),
                       backgroundColor: MaterialStateProperty.all(
-                          Theme.of(context).primaryColor),
+                          Theme.of(context).secondaryHeaderColor),
                     ),
                     child: Text(
                       'Choose Date',
