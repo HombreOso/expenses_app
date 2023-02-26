@@ -21,6 +21,8 @@ There should be a possibility to change the above settings via menu on the AppBa
 
 The chart on the main page sholud display spent amount and remaining amount for each category of dynamic expenses.
 
+Available amount per category divided by number of remaining month days should be also displayed.
+
 Total number of dynamic expense categories should not be more than seven.
 
 Monitoring timespan: from 1st day of current month to the last day of that month.
