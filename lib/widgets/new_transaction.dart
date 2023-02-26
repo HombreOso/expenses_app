@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import './dropdownExpenseCategories.dart';
+
 class NewTransaction extends StatefulWidget {
   final Function addTx;
 
@@ -13,6 +15,7 @@ class NewTransaction extends StatefulWidget {
 class _NewTransactionState extends State<NewTransaction> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  String _selectedCategory = "Food";
   DateTime? _selectedDate;
 
   void _submitData() {
@@ -72,6 +75,9 @@ class _NewTransactionState extends State<NewTransaction> {
               onSubmitted: (_) => _submitData(),
               // onChanged: (val) => amountInput = val,
             ),
+            DropdownButtonExample(onChangedDDL: (value) {
+              _selectedCategory = value;
+            }),
             Container(
               height: 70,
               child: Row(
