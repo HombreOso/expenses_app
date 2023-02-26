@@ -25,7 +25,7 @@ Available amount per category divided by number of remaining month days should b
 
 Total number of dynamic expense categories should not be more than seven.
 
-It should be possible to edit expenses. E.g. if they are created incorrectly.
+It should be possible to edit expenses (by clicking on a ListTile). E.g. if they are created incorrectly.
 
 Monitoring timespan: from 1st day of current month to the last day of that month.
 
