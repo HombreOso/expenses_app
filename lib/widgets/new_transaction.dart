@@ -86,9 +86,9 @@ class _NewTransactionState extends State<NewTransaction> {
                   TextButton(
                     style: ButtonStyle(
                       foregroundColor: MaterialStateProperty.all(
-                          Theme.of(context).primaryColor),
-                      backgroundColor: MaterialStateProperty.all(
                           Theme.of(context).secondaryHeaderColor),
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).primaryColor),
                     ),
                     child: Text(
                       'Choose Date',
@@ -104,8 +104,8 @@ class _NewTransactionState extends State<NewTransaction> {
             ElevatedButton(
               child: Text('Add Transaction'),
               style: ButtonStyle(
-                foregroundColor:
-                    MaterialStateProperty.all(Theme.of(context).primaryColor),
+                foregroundColor: MaterialStateProperty.all(
+                    Theme.of(context).secondaryHeaderColor),
                 backgroundColor:
                     MaterialStateProperty.all(Theme.of(context).primaryColor),
                 textStyle: MaterialStateProperty.all(Theme.of(context)
