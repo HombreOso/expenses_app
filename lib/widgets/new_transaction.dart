@@ -29,7 +29,7 @@ class _NewTransactionState extends State<NewTransaction> {
       return;
     }
 
-    widget.addTx(enteredTitle, enteredAmount, _selectedDate, "Food");
+    widget.addTx(enteredTitle, enteredAmount, _selectedDate, _selectedCategory);
 
     Navigator.of(context).pop();
   }
