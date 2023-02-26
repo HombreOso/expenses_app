@@ -5,8 +5,11 @@ The static monthly expenses like rent, transportation, credit payments, family a
 other regular payments will be subtracted from the salary.
 
 There should be an option to input those expenses on a separate screen at the setup of the app:
+
 Like:
+
     - Salary netto
+
     - List of regular expenses: here we need to opt for dynamic List of Cards containing TextInput widgets.
     The user should be able to give a name to each of regular expenses and type in the corresponding static amount
 
