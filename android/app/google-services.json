@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "12560855327",
+    "project_id": "flutter-expenses-app-b5c1d",
+    "storage_bucket": "flutter-expenses-app-b5c1d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:12560855327:android:d36ddf00e72aad8b93802a",
+        "android_client_info": {
+          "package_name": "com.example.expenses_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "12560855327-0ftfdrtdivcrgdgrm0ersfibf5llkj25.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWufxkGuJGtdLkup9n_F_ya9niRiA-hgQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "12560855327-0ftfdrtdivcrgdgrm0ersfibf5llkj25.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
