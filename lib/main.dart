@@ -8,6 +8,7 @@ import './models/transaction.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   await Firebase.initializeApp(
@@ -70,6 +71,9 @@ class _MyHomePageState extends State<MyHomePage> {
     // ),
   ];
 
+  final CollectionReference transactionCollectionRef =
+      FirebaseFirestore.instance.collection('transactions');
+
   List<Transaction_> get _recentTransactions {
     return _userTransactions.where((tx) {
       return tx.date.isAfter(
@@ -80,8 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(
-      String txTitle, double txAmount, DateTime chosenDate, String txCategory) {
+  Future<void> _addNewTransaction(String txTitle, double txAmount,
+      DateTime chosenDate, String txCategory) async {
     final newTx = Transaction_(
       title: txTitle,
       amount: txAmount,
@@ -89,6 +93,13 @@ class _MyHomePageState extends State<MyHomePage> {
       id: DateTime.now().toString(),
       category: txCategory,
     );
+    // Write the transaction to Firebase
+    await transactionCollectionRef.add({
+      'title': newTx.title,
+      'amount': newTx.amount,
+      'date': newTx.date,
+      'category': newTx.category,
+    });
 
     setState(() {
       _userTransactions.add(newTx);
