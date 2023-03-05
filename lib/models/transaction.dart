@@ -1,11 +1,11 @@
-class Transaction {
+class Transaction_ {
   final String id;
   final String title;
   final String category;
   final double amount;
   final DateTime date;
 
-  Transaction({
+  Transaction_({
     required this.id,
     required this.title,
     required this.category,

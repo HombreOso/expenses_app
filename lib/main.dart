@@ -7,8 +7,14 @@ import './models/transaction.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:firebase_database/firebase_database.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -49,7 +55,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _userTransactions = [
+  final List<Transaction_> _userTransactions = [
     // Transaction(
     //   id: 't1',
     //   title: 'New Shoes',
@@ -64,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // ),
   ];
 
-  List<Transaction> get _recentTransactions {
+  List<Transaction_> get _recentTransactions {
     return _userTransactions.where((tx) {
       return tx.date.isAfter(
         DateTime.now().subtract(
@@ -76,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _addNewTransaction(
       String txTitle, double txAmount, DateTime chosenDate, String txCategory) {
-    final newTx = Transaction(
+    final newTx = Transaction_(
       title: txTitle,
       amount: txAmount,
       date: chosenDate,

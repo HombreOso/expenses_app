@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
-  final List<Transaction> transactions;
+  final List<Transaction_> transactions;
   final Function deleteTx;
 
   TransactionList(this.transactions, this.deleteTx);
