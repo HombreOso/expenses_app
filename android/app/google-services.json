@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "12560855327",
-    "project_id": "flutter-expenses-app-b5c1d",
-    "storage_bucket": "flutter-expenses-app-b5c1d.appspot.com"
+    "project_number": "94354689411",
+    "firebase_url": "https://flutter-expenses-app-f477a-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "flutter-expenses-app-f477a",
+    "storage_bucket": "flutter-expenses-app-f477a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:12560855327:android:d36ddf00e72aad8b93802a",
+        "mobilesdk_app_id": "1:94354689411:android:9ca0ceb3aa1774682dfab6",
         "android_client_info": {
           "package_name": "com.example.expenses_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "12560855327-0ftfdrtdivcrgdgrm0ersfibf5llkj25.apps.googleusercontent.com",
+          "client_id": "94354689411-02odtmdtjvupflib3oqm4eqae0vjat1r.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCWufxkGuJGtdLkup9n_F_ya9niRiA-hgQ"
+          "current_key": "AIzaSyCBwa5wXl9VvoMNnsqjQbt9UEg7QcrQzro"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "12560855327-0ftfdrtdivcrgdgrm0ersfibf5llkj25.apps.googleusercontent.com",
+              "client_id": "94354689411-02odtmdtjvupflib3oqm4eqae0vjat1r.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
