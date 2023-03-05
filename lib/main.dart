@@ -5,6 +5,9 @@ import './widgets/transaction_list.dart';
 import './widgets/chart.dart';
 import './models/transaction.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
