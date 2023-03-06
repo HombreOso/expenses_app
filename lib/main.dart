@@ -93,12 +93,24 @@ class _MyHomePageState extends State<MyHomePage> {
       category: txCategory,
     );
     // Write the transaction to Firebase
-    await transactionCollectionRef.add({
-      'title': newTx.title,
-      'amount': newTx.amount,
-      'date': newTx.date,
-      'category': newTx.category,
-    });
+    transactionCollectionRef.limit(1).get().then((querySnapshot) async {
+      if (querySnapshot.size == 0) {
+        await transactionCollectionRef.doc("first entry").set({
+          'title': newTx.title,
+          'amount': newTx.amount,
+          'date': newTx.date,
+          'category': newTx.category,
+        });
+      } else {
+        await transactionCollectionRef.add({
+          'title': newTx.title,
+          'amount': newTx.amount,
+          'date': newTx.date,
+          'category': newTx.category,
+        });
+      }
+// ignore: invalid_return_type_for_catch_error
+    }).catchError((error) => print('Failed to get collection: $error'));
 
     setState(() {
       _userTransactions.add(newTx);
