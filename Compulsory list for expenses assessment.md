@@ -1,7 +1,7 @@
 Compulsory list for expenses
 ================================
 
-Static monthly expenses such as rent, travel expenses, loan payments, family assistance, gym and other regular payments are deducted from the salary.
+Static monthly expenses such as rent, travel expenses, loan payments, family assistance, gym and other regular payments are subtracted from the salary.
 
 There should be an option to enter these expenses on a separate screen when setting up the app:
 
@@ -13,7 +13,7 @@ E.G.:
 
 
 The user should be able to name each of the regular expenses and enter the corresponding static amount.
-Dynamic (controllable) expenses should also be entered when the app is launched. For each dynamic expense category, it should be possible to enter a specific amount (optionally: a specific percentage of the available amount remaining after regular payments are deducted).
+Dynamic (controllable) expenses should also be entered when the app is launched for a first time. For each dynamic expense category, it should be possible to enter a specific amount (optionally: a specific percentage of the available amount remaining after regular payments are subtracted).
 
 There should be a way to change the above settings from the menu in the AppBar.
 
