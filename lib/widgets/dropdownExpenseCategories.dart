@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class DropdownButtonExample extends StatefulWidget {
-
   final Function(String) onChangedDDL;
 
   DropdownButtonExample({
@@ -10,21 +9,27 @@ class DropdownButtonExample extends StatefulWidget {
   });
 
   @override
-  State<DropdownButtonExample> createState() => _DropdownButtonExampleState(onChangedDDL: onChangedDDL);
+  State<DropdownButtonExample> createState() =>
+      _DropdownButtonExampleState(onChangedDDL: onChangedDDL);
 }
 
 class _DropdownButtonExampleState extends State<DropdownButtonExample> {
-  final List<String> listExpenseCategories = const <String>["Food", "Amazon", "Education", "Gadgets", "Others"];
+  final List<String> listExpenseCategories = const <String>[
+    "Food",
+    "Amazon",
+    "Education",
+    "Gadgets",
+    "Others",
+  ];
   Function(String) onChangedDDL;
-  String dropdownValue = "Food"; // dropdownValue is initialized to a value contained in the listExpenseCategories
+  String dropdownValue =
+      "Food"; // dropdownValue is initialized to a value contained in the listExpenseCategories
   // ToDo: make the category "Food" be set by default, so that user only has to type the cost and hit "Add" button
   // Current behaviour: if the category is not set, the entry has only cost value and empty string instead of "Food"
 
-  _DropdownButtonExampleState(
-    {
-        required this.onChangedDDL,
-    }
-  );
+  _DropdownButtonExampleState({
+    required this.onChangedDDL,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +42,6 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
         // This is called when the user selects an item.
         setState(() {
           dropdownValue = value!;
-
         });
         onChangedDDL(dropdownValue);
       },
