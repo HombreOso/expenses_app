@@ -19,7 +19,10 @@ void main() {
       builder: (context, snapshot) {
         // Check for errors
         if (snapshot.hasError) {
-          return Text("Something went wrong");
+          return Text(
+            "Something went wrong",
+            textDirection: TextDirection.ltr,
+          );
         }
 
         // Once complete, show your application
@@ -28,7 +31,10 @@ void main() {
         }
 
         // Otherwise, show a loading indicator
-        return Text("Loading");
+        return Text(
+          "Loading",
+          textDirection: TextDirection.ltr,
+        );
       },
     ),
   );
