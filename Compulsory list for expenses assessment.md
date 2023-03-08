@@ -1,35 +1,33 @@
 Compulsory list for expenses
 ================================
 
-The static monthly expenses like rent, transportation, credit payments, family assistance, gym,
-other regular payments will be subtracted from the salary.
+Static monthly expenses such as rent, travel expenses, loan payments, family assistance, gym and other regular payments are deducted from the salary.
 
-There should be an option to input those expenses on a separate screen at the setup of the app:
+There should be an option to enter these expenses on a separate screen when setting up the app:
 
-Like:
+E.G.:
 
-    - Salary netto
+- Salary net
 
-    - List of regular expenses: here we need to opt for dynamic List of Cards containing TextInput widgets.
-    The user should be able to give a name to each of regular expenses and type in the corresponding static amount
+- List of regular expenses: Here we need to opt for a dynamic list of cards that contain TextInput widgets.
 
-Dynamic (controllable) expenses should be also input at the start of the app.
-Certain amount (optionally: certain percentage of the available amount (which remains after subtracting regular payments)) 
-should be input for each dynamic expense category.
 
-There should be a possibility to change the above settings via menu on the AppBar.
+The user should be able to name each of the regular expenses and enter the corresponding static amount.
+Dynamic (controllable) expenses should also be entered when the app is launched. For each dynamic expense category, it should be possible to enter a specific amount (optionally: a specific percentage of the available amount remaining after regular payments are deducted).
 
-The chart on the main page sholud display spent amount and remaining amount for each category of dynamic expenses.
+There should be a way to change the above settings from the menu in the AppBar.
 
-Available amount per category divided by number of remaining month days should be also displayed.
+The chart on the main page should show the amount spent and the amount remaining for each category of dynamic spending.
 
-Total number of dynamic expense categories should not be more than seven.
+The amount available per category divided by the number of days left in the month should also be displayed.
 
-It should be possible to edit expenses (by clicking on a ListTile). E.g. if they are created incorrectly.
+The total number of dynamic spend categories should not exceed seven.
 
-Monitoring timespan: from 1st day of current month to the last day of that month.
+It should be possible to edit expenses (by clicking on a ListTile). E.g. if they were created incorrectly.
 
-Data should be collated into a database. Which database to use: a local NoSQL or SQL database, and a cloud database like Firebase.
+Monitoring period: from the 1st day of the current month to the last day of the month.
+
+The data should be collected in a database. Which database should be used: a local NoSQL or SQL database or a cloud database like Firebase.
 
 
 
