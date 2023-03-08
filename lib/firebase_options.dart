@@ -49,7 +49,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '94354689411',
     projectId: 'flutter-expenses-app-f477a',
     authDomain: 'flutter-expenses-app-f477a.firebaseapp.com',
-    databaseURL: 'https://flutter-expenses-app-f477a-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://flutter-expenses-app-f477a-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'flutter-expenses-app-f477a.appspot.com',
     measurementId: 'G-BR5JEPDXVG',
   );
@@ -59,7 +60,8 @@ class DefaultFirebaseOptions {
     appId: '1:94354689411:android:9ca0ceb3aa1774682dfab6',
     messagingSenderId: '94354689411',
     projectId: 'flutter-expenses-app-f477a',
-    databaseURL: 'https://flutter-expenses-app-f477a-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://flutter-expenses-app-f477a-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'flutter-expenses-app-f477a.appspot.com',
   );
 
@@ -68,9 +70,11 @@ class DefaultFirebaseOptions {
     appId: '1:94354689411:ios:1511a7bbbf1a9ef22dfab6',
     messagingSenderId: '94354689411',
     projectId: 'flutter-expenses-app-f477a',
-    databaseURL: 'https://flutter-expenses-app-f477a-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://flutter-expenses-app-f477a-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'flutter-expenses-app-f477a.appspot.com',
-    iosClientId: '94354689411-g5nd2j8ittj4teind0h4ffu8qedmtgmj.apps.googleusercontent.com',
+    iosClientId:
+        '94354689411-g5nd2j8ittj4teind0h4ffu8qedmtgmj.apps.googleusercontent.com',
     iosBundleId: 'com.example.expensesApp',
   );
 
@@ -79,9 +83,11 @@ class DefaultFirebaseOptions {
     appId: '1:94354689411:ios:1511a7bbbf1a9ef22dfab6',
     messagingSenderId: '94354689411',
     projectId: 'flutter-expenses-app-f477a',
-    databaseURL: 'https://flutter-expenses-app-f477a-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://flutter-expenses-app-f477a-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'flutter-expenses-app-f477a.appspot.com',
-    iosClientId: '94354689411-g5nd2j8ittj4teind0h4ffu8qedmtgmj.apps.googleusercontent.com',
+    iosClientId:
+        '94354689411-g5nd2j8ittj4teind0h4ffu8qedmtgmj.apps.googleusercontent.com',
     iosBundleId: 'com.example.expensesApp',
   );
 }
