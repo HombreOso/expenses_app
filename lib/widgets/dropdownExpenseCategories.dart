@@ -19,8 +19,10 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
     "Amazon",
     "Education",
     "Gadgets",
+    "Lieferando",
     "Others",
   ];
+  // TODO screen where this categories can be specified by user
   Function(String) onChangedDDL;
   String dropdownValue =
       "Food"; // dropdownValue is initialized to a value contained in the listExpenseCategories
