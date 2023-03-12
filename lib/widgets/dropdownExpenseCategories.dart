@@ -21,6 +21,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
     "Gadgets",
     "Others",
   ];
+  // ignore: todo
   // TODO screen where this categories can be specified by user
   Function(String) onChangedDDL;
   String dropdownValue =

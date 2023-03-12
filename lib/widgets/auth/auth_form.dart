@@ -41,11 +41,12 @@ class _AuthFormState extends State<AuthForm> {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
 
+    // ignore: unnecessary_null_comparison
     if (_userImageFile == null && !_isLogin) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Please pick an image.'),
-          backgroundColor: Theme.of(context).errorColor,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
