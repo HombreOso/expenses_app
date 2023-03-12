@@ -47,14 +47,14 @@ class _AuthScreenState extends State<AuthScreen> {
             .child('user_image')
             .child(authResult.user!.uid + '.jpg');
 
-        await ref.putFile(image).onComplete;
+        TaskSnapshot uploadTask = await ref.putFile(image);
 
         final url = await ref.getDownloadURL();
 
         await FirebaseFirestore.instance
             .collection('users')
-            .document(authResult.user.uid)
-            .setData({
+            .doc(authResult.user!.uid)
+            .set({
           'username': username,
           'email': email,
           'image_url': url,
@@ -64,10 +64,10 @@ class _AuthScreenState extends State<AuthScreen> {
       var message = 'An error occurred, pelase check your credentials!';
 
       if (err.message != null) {
-        message = err.message;
+        message = err.message!;
       }
 
-      Scaffold.of(ctx).showSnackBar(
+      ScaffoldMessenger.of(ctx).showSnackBar(
         SnackBar(
           content: Text(message),
           backgroundColor: Theme.of(ctx).errorColor,
