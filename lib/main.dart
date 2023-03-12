@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/screens/auth_screen.dart';
+import 'package:flutter_complete_guide/screens/splash_screen.dart';
 
 import '../screens/expenses_screen.dart';
 
@@ -11,6 +13,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,7 +73,17 @@ class MyApp extends StatelessWidget {
               ),
         ),
       ),
-      home: MyHomePage(),
+      home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (ctx, userSnapshot) {
+            if (userSnapshot.connectionState == ConnectionState.waiting) {
+              return SplashScreen();
+            }
+            if (userSnapshot.hasData) {
+              return MyHomePage();
+            }
+            return AuthScreen();
+          }),
     );
   }
 }

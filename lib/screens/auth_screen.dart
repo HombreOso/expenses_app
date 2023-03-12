@@ -21,7 +21,6 @@ class _AuthScreenState extends State<AuthScreen> {
     String email,
     String password,
     String username,
-    File image,
     bool isLogin,
     BuildContext ctx,
   ) async {
@@ -47,21 +46,16 @@ class _AuthScreenState extends State<AuthScreen> {
             .child('user_image')
             .child(authResult.user!.uid + '.jpg');
 
-        TaskSnapshot uploadTask = await ref.putFile(image);
-
-        final url = await ref.getDownloadURL();
-
         await FirebaseFirestore.instance
             .collection('users')
             .doc(authResult.user!.uid)
             .set({
           'username': username,
           'email': email,
-          'image_url': url,
         });
       }
     } on PlatformException catch (err) {
-      var message = 'An error occurred, pelase check your credentials!';
+      var message = 'An error occurred, please check your credentials!';
 
       if (err.message != null) {
         message = err.message!;
