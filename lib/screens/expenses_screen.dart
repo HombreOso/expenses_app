@@ -55,6 +55,9 @@ class _MyHomePageState extends State<MyHomePage> {
       id: DateTime.now().toString(),
       category: txCategory,
     );
+    setState(() {
+      _userTransactions.add(newTx);
+    });
     // Write the transaction to Firebase
     await transactionCollectionRef.add({
       'id': DateTime.now().toString(),
@@ -62,10 +65,6 @@ class _MyHomePageState extends State<MyHomePage> {
       'amount': newTx.amount,
       'date': Timestamp.fromDate(newTx.date),
       'category': newTx.category,
-    });
-
-    setState(() {
-      _userTransactions.add(newTx);
     });
   }
 
