@@ -75,9 +75,12 @@ class _NewTransactionState extends State<NewTransaction> {
               onSubmitted: (_) => _submitData(),
               // onChanged: (val) => amountInput = val,
             ),
-            DropdownButtonExample(onChangedDDL: (value) {
-              _selectedCategory = value;
-            }),
+            DropdownButtonExample(
+              onChangedDDL: (value) {
+                _selectedCategory = value;
+              },
+              ctx: context,
+            ),
             Container(
               height: 70,
               child: Row(
@@ -108,7 +111,12 @@ class _NewTransactionState extends State<NewTransaction> {
               ),
             ),
             ElevatedButton(
-              child: Text('Add Transaction'),
+              child: Text(
+                'Add Transaction',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all(
                     Theme.of(context).secondaryHeaderColor),

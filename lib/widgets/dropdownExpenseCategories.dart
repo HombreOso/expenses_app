@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class DropdownButtonExample extends StatefulWidget {
   final Function(String) onChangedDDL;
+  final BuildContext ctx;
 
   DropdownButtonExample({
     super.key,
     required this.onChangedDDL,
+    required this.ctx,
   });
 
   @override
@@ -35,24 +37,39 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 16,
-      style: const TextStyle(color: Color.fromARGB(255, 12, 113, 195)),
-      onChanged: (String? value) {
-        // This is called when the user selects an item.
-        setState(() {
-          dropdownValue = value!;
-        });
-        onChangedDDL(dropdownValue);
-      },
-      items: listExpenseCategories.map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
+    return Container(
+      margin: EdgeInsets.all(2),
+      height: 35,
+      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+      decoration: BoxDecoration(
+        color: Theme.of(widget.ctx).primaryColor,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: DropdownButton<String>(
+        value: dropdownValue,
+        icon: const Icon(
+          Icons.arrow_downward,
+          color: Colors.amber,
+        ),
+        elevation: 16,
+        style: TextStyle(
+          color: Theme.of(widget.ctx).secondaryHeaderColor,
+          fontWeight: FontWeight.bold,
+        ),
+        onChanged: (String? value) {
+          // This is called when the user selects an item.
+          setState(() {
+            dropdownValue = value!;
+          });
+          onChangedDDL(dropdownValue);
+        },
+        items: listExpenseCategories.map((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      ),
     );
   }
 }
