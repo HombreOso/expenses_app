@@ -55,6 +55,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
         secondaryHeaderColor: Colors.amber,
+
         // errorColor: Colors.red,
         fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
@@ -71,6 +72,9 @@ class MyApp extends StatelessWidget {
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
+        ),
+        iconTheme: IconThemeData(
+          color: Colors.amber,
         ),
       ),
       home: StreamBuilder(

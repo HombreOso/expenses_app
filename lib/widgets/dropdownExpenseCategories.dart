@@ -5,7 +5,6 @@ class DropdownButtonExample extends StatefulWidget {
   final BuildContext ctx;
 
   DropdownButtonExample({
-    super.key,
     required this.onChangedDDL,
     required this.ctx,
   });
@@ -45,30 +44,34 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
         color: Theme.of(widget.ctx).primaryColor,
         borderRadius: BorderRadius.circular(6),
       ),
-      child: DropdownButton<String>(
-        value: dropdownValue,
-        icon: const Icon(
-          Icons.arrow_downward,
-          color: Colors.amber,
+      child: Theme(
+        data: Theme.of(context),
+        child: DropdownButton<String>(
+          value: dropdownValue,
+          icon: Icon(
+            Icons.arrow_downward,
+            //color: Colors.amber,
+            color: Theme.of(widget.ctx).iconTheme.color,
+          ),
+          elevation: 16,
+          style: TextStyle(
+            color: Theme.of(widget.ctx).secondaryHeaderColor,
+            fontWeight: FontWeight.bold,
+          ),
+          onChanged: (String? value) {
+            // This is called when the user selects an item.
+            setState(() {
+              dropdownValue = value!;
+            });
+            onChangedDDL(dropdownValue);
+          },
+          items: listExpenseCategories.map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
         ),
-        elevation: 16,
-        style: TextStyle(
-          color: Theme.of(widget.ctx).secondaryHeaderColor,
-          fontWeight: FontWeight.bold,
-        ),
-        onChanged: (String? value) {
-          // This is called when the user selects an item.
-          setState(() {
-            dropdownValue = value!;
-          });
-          onChangedDDL(dropdownValue);
-        },
-        items: listExpenseCategories.map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
       ),
     );
   }
