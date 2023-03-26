@@ -52,11 +52,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _addNewTransaction(String txTitle, double txAmount,
       DateTime chosenDate, String txCategory) async {
+    final String transactionIdAsCurrentDateTime = DateTime.now().toString();
     final newTx = Transaction_(
       title: txTitle,
       amount: txAmount,
       date: chosenDate,
-      id: DateTime.now().toString(),
+      id: transactionIdAsCurrentDateTime,
       category: txCategory,
       uid: uid,
     );
@@ -66,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // Write the transaction to Firebase
     await transactionCollectionRef.add({
       'uid': uid,
-      'id': DateTime.now().toString(),
+      'id': transactionIdAsCurrentDateTime,
       'title': newTx.title,
       'amount': newTx.amount,
       'date': Timestamp.fromDate(newTx.date),
@@ -87,10 +88,27 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _deleteTransaction(String id) {
+  void _deleteTransaction(String id, String uid) async {
+    // Remove the transaction from the local list
     setState(() {
       _userTransactions.removeWhere((tx) => tx.id == id);
     });
+    print("Id: $id");
+    print("Uid: $uid");
+    // Get a reference to the Firestore document using the local transaction ID
+    final transactionDoc = await transactionCollectionRef
+        .where('uid', isEqualTo: uid)
+        .where('id', isEqualTo: id)
+        .get()
+        .then((value) => value.docs.first.reference);
+
+    // Delete the document from Firestore
+    try {
+      await transactionDoc.delete();
+    } catch (e) {
+      // Handle errors
+      print('Failed to delete transaction: $e');
+    }
   }
 
   @override
