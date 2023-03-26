@@ -37,8 +37,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(2),
-      height: 32,
+      height: 35,
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
       decoration: BoxDecoration(
         color: Theme.of(widget.ctx).primaryColor,
@@ -57,6 +56,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
           style: TextStyle(
             color: Theme.of(widget.ctx).secondaryHeaderColor,
             fontWeight: FontWeight.bold,
+            fontFamily: Theme.of(widget.ctx).textTheme.titleLarge!.fontFamily,
           ),
           onChanged: (String? value) {
             // This is called when the user selects an item.
