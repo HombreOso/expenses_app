@@ -4,6 +4,7 @@ class Transaction_ {
   final String category;
   final double amount;
   final DateTime date;
+  final String uid;
 
   Transaction_({
     required this.id,
@@ -11,5 +12,6 @@ class Transaction_ {
     required this.category,
     required this.amount,
     required this.date,
+    required this.uid,
   });
 }

@@ -9,6 +9,8 @@ import '../models/transaction.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../firebase_options.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -36,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final CollectionReference transactionCollectionRef =
       FirebaseFirestore.instance.collection('transactions');
+  String uid = FirebaseAuth.instance.currentUser!.uid.toString();
 
   List<Transaction_> get _recentTransactions {
     return _userTransactions.where((tx) {
@@ -55,12 +58,14 @@ class _MyHomePageState extends State<MyHomePage> {
       date: chosenDate,
       id: DateTime.now().toString(),
       category: txCategory,
+      uid: uid,
     );
     setState(() {
       _userTransactions.add(newTx);
     });
     // Write the transaction to Firebase
     await transactionCollectionRef.add({
+      'uid': uid,
       'id': DateTime.now().toString(),
       'title': newTx.title,
       'amount': newTx.amount,

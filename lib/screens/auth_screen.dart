@@ -53,6 +53,7 @@ class _AuthScreenState extends State<AuthScreen> {
           'username': username,
           'email': email,
         });
+        String userID = authResult.user!.uid;
       }
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
