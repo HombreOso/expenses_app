@@ -75,6 +75,9 @@ class _NewTransactionState extends State<NewTransaction> {
               onSubmitted: (_) => _submitData(),
               // onChanged: (val) => amountInput = val,
             ),
+            SizedBox(
+              height: 10,
+            ),
             DropdownButtonExample(
               onChangedDDL: (value) {
                 _selectedCategory = value;
@@ -118,15 +121,18 @@ class _NewTransactionState extends State<NewTransaction> {
                 ),
               ),
               style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all(
-                    Theme.of(context).secondaryHeaderColor),
-                backgroundColor:
-                    MaterialStateProperty.all(Theme.of(context).primaryColor),
-                textStyle: MaterialStateProperty.all(Theme.of(context)
-                    .textTheme
-                    .labelLarge!
-                    .copyWith(color: Colors.white)),
-              ),
+                  foregroundColor: MaterialStateProperty.all(
+                      Theme.of(context).secondaryHeaderColor),
+                  backgroundColor:
+                      MaterialStateProperty.all(Theme.of(context).primaryColor),
+                  textStyle: MaterialStateProperty.all(Theme.of(context)
+                      .textTheme
+                      .labelLarge!
+                      .copyWith(color: Colors.white)),
+                  padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  ),
+                  alignment: Alignment.center),
               onPressed: _submitData,
             ),
           ],

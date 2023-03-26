@@ -39,8 +39,8 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(2),
-      height: 35,
-      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+      height: 32,
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
       decoration: BoxDecoration(
         color: Theme.of(widget.ctx).primaryColor,
         borderRadius: BorderRadius.circular(6),
