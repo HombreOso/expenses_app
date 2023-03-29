@@ -21,23 +21,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction_> _userTransactions = [
-    // Transaction(
-    //   id: 't1',
-    //   title: 'New Shoes',
-    //   amount: 69.99,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: 't2',
-    //   title: 'Weekly Groceries',
-    //   amount: 16.53,
-    //   date: DateTime.now(),
-    // ),
-  ];
+  static Future<List<Transaction_>> _fetchDataFromFirestore() async {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('transactions').get();
+    final List<Transaction_> loadedTransactions =
+        snapshot.docs.map((doc) => Transaction_.fromMap(doc.data())).toList();
+    return loadedTransactions;
+  }
 
-  final CollectionReference transactionCollectionRef =
+  List<Transaction_> _userTransactions =
+      _fetchDataFromFirestore() as List<Transaction_>;
+
+  static final CollectionReference transactionCollectionRef =
       FirebaseFirestore.instance.collection('transactions');
+
+  Stream<QuerySnapshot> getTransactions() {
+    return transactionCollectionRef.snapshots();
+  }
+
   String uid = FirebaseAuth.instance.currentUser!.uid.toString();
 
   List<Transaction_> get _recentTransactions {
@@ -157,6 +158,26 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Chart(_recentTransactions),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('transactions')
+                  .orderBy('date', descending: true)
+                  .snapshots(),
+              builder: (ctx, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                final List<Transaction_> loadedTransactions = [];
+                final List<DocumentSnapshot> documents = snapshot.data.docs;
+                documents.forEach((doc) {
+                  final transaction = Transaction_.fromSnapshot(doc);
+                  loadedTransactions.add(transaction);
+                });
+                return TransactionList(loadedTransactions, _deleteTransaction);
+              },
+            ),
             TransactionList(_userTransactions, _deleteTransaction),
           ],
         ),

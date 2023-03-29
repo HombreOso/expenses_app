@@ -1,17 +1,58 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Transaction_ {
-  final String id;
-  final String title;
-  final String category;
-  final double amount;
-  final DateTime date;
-  final String uid;
+  var uid;
+
+  var category;
+
+  var id;
+
+  var date;
+
+  var amount;
+
+  var title;
 
   Transaction_({
-    required this.id,
     required this.title,
-    required this.category,
     required this.amount,
     required this.date,
+    required this.id,
+    required this.category,
     required this.uid,
   });
+
+  factory Transaction_.fromMap(Map<String, dynamic> map) {
+    return Transaction_(
+      title: map['title'],
+      amount: map['amount'],
+      date: map['date'].toDate(),
+      id: map['id'],
+      category: map['category'],
+      uid: map['uid'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'amount': amount,
+      'date': Timestamp.fromDate(date),
+      'id': id,
+      'category': category,
+      'uid': uid,
+    };
+  }
+
+  Transaction_ fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    final data = snapshot.data();
+    return Transaction_(
+      id: snapshot.id,
+      title: data!['title'] as String?,
+      amount: data['amount'] as double?,
+      category: data['category'] as String?,
+      date: DateTime.parse(data['date']),
+      uid: data['uid'] as String?,
+    );
+  }
 }
