@@ -29,8 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return loadedTransactions;
   }
 
-  List<Transaction_> _userTransactions =
-      _fetchDataFromFirestore() as List<Transaction_>;
+  List<Transaction_> _userTransactions = [];
 
   static final CollectionReference transactionCollectionRef =
       FirebaseFirestore.instance.collection('transactions');
@@ -170,7 +169,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 }
                 final List<Transaction_> loadedTransactions = [];
-                final List<DocumentSnapshot> documents = snapshot.data.docs;
+                final List<DocumentSnapshot<Map<String, dynamic>>> documents =
+                    snapshot.data!.docs
+                        .cast<DocumentSnapshot<Map<String, dynamic>>>();
                 documents.forEach((doc) {
                   final transaction = Transaction_.fromSnapshot(doc);
                   loadedTransactions.add(transaction);
@@ -178,7 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 return TransactionList(loadedTransactions, _deleteTransaction);
               },
             ),
-            TransactionList(_userTransactions, _deleteTransaction),
+            //TransactionList(_userTransactions, _deleteTransaction),
           ],
         ),
       ),

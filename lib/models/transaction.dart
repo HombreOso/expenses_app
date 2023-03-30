@@ -7,7 +7,7 @@ class Transaction_ {
 
   var id;
 
-  var date;
+  DateTime date;
 
   var amount;
 
@@ -44,15 +44,16 @@ class Transaction_ {
     };
   }
 
-  Transaction_ fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+  static Transaction_ fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     final data = snapshot.data();
     return Transaction_(
       id: snapshot.id,
       title: data!['title'] as String?,
       amount: data['amount'] as double?,
       category: data['category'] as String?,
-      date: DateTime.parse(data['date']),
-      uid: data['uid'] as String?,
+      date: (data['date'] as Timestamp).toDate(),
+      uid: data['uid'] as String,
     );
   }
 }
