@@ -31,6 +31,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Transaction_> _userTransactions = [];
 
+  final int observationDaysNumberMonth = 31;
+  final int observationDaysNumberWeek = 7;
+
   static final CollectionReference transactionCollectionRef =
       FirebaseFirestore.instance.collection('transactions');
 
@@ -40,11 +43,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String uid = FirebaseAuth.instance.currentUser!.uid.toString();
 
-  List<Transaction_> get _recentTransactions {
-    return _userTransactions.where((tx) {
+  List<Transaction_> _recentTransactions(
+      List<Transaction_> userTransactions_passed, int numDays) {
+    return userTransactions_passed.where((tx) {
       return tx.date.isAfter(
         DateTime.now().subtract(
-          Duration(days: 31), //  transactions in the last 31 days
+          Duration(days: numDays), //  transactions in the last 31 days
         ),
       );
     }).toList();
@@ -151,37 +155,48 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Chart(_recentTransactions),
-            StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('transactions')
-                  .orderBy('date', descending: true)
-                  .snapshots(),
-              builder: (ctx, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                final List<Transaction_> loadedTransactions = [];
-                final List<DocumentSnapshot<Map<String, dynamic>>> documents =
-                    snapshot.data!.docs
-                        .cast<DocumentSnapshot<Map<String, dynamic>>>();
-                documents.forEach((doc) {
-                  final transaction = Transaction_.fromSnapshot(doc);
-                  loadedTransactions.add(transaction);
-                });
-                return TransactionList(loadedTransactions, _deleteTransaction);
-              },
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('transactions')
+            .orderBy('date', descending: true)
+            .snapshots(),
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final List<Transaction_> loadedTransactions = [];
+          final List<DocumentSnapshot<Map<String, dynamic>>> documents =
+              snapshot.data!.docs
+                  .cast<DocumentSnapshot<Map<String, dynamic>>>();
+          documents.forEach((doc) {
+            final transaction = Transaction_.fromSnapshot(doc);
+            loadedTransactions.add(transaction);
+          });
+          return SingleChildScrollView(
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Chart(_recentTransactions(
+                  loadedTransactions,
+                  observationDaysNumberWeek,
+                )),
+                TransactionList(
+                  _recentTransactions(
+                    loadedTransactions,
+                    observationDaysNumberMonth,
+                  ),
+                  _deleteTransaction,
+                ),
+                //  transactions in the last 31 days
+              ],
             ),
-            //TransactionList(_userTransactions, _deleteTransaction),
-          ],
-        ),
+          );
+
+          //TransactionList(_userTransactions, _deleteTransaction),
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
