@@ -47,6 +47,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
         data: Theme.of(context),
         child: DropdownButton<String>(
           value: dropdownValue,
+          dropdownColor: Theme.of(widget.ctx).primaryColor,
           icon: Icon(
             Icons.arrow_downward,
             //color: Colors.amber,
