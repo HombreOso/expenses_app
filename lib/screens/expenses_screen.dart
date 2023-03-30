@@ -45,13 +45,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Transaction_> _recentTransactions(
       List<Transaction_> userTransactions_passed, int numDays) {
-    return userTransactions_passed.where((tx) {
-      return tx.date.isAfter(
-        DateTime.now().subtract(
-          Duration(days: numDays), //  transactions in the last 31 days
-        ),
-      );
-    }).toList();
+    return userTransactions_passed
+        .where((tx) {
+          return tx.date.isAfter(
+            DateTime.now().subtract(
+              Duration(days: numDays), //  transactions in the last 31 days
+            ),
+          );
+        })
+        .where(
+          (tx) => tx.uid == uid,
+        )
+        .toList();
   }
 
   Future<void> _addNewTransaction(String txTitle, double txAmount,
