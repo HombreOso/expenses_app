@@ -16,7 +16,7 @@ class _NewTransactionState extends State<NewTransaction> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   String _selectedCategory = "Food";
-  DateTime? _selectedDate;
+  DateTime _selectedDate = DateTime.now();
 
   void _submitData() {
     if (_amountController.text.isEmpty) {
@@ -42,11 +42,16 @@ class _NewTransactionState extends State<NewTransaction> {
       lastDate: DateTime.now(),
     ).then((pickedDate) {
       if (pickedDate == null) {
-        return;
+        setState(() {
+          print("then: $pickedDate");
+          _selectedDate = DateTime.now();
+        });
+      } else {
+        setState(() {
+          print("else: $pickedDate");
+          _selectedDate = pickedDate;
+        });
       }
-      setState(() {
-        _selectedDate = pickedDate;
-      });
     });
     print('...');
   }

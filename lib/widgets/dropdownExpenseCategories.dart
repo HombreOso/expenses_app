@@ -62,7 +62,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
           onChanged: (String? value) {
             // This is called when the user selects an item.
             setState(() {
-              dropdownValue = value!;
+              dropdownValue = value ?? "Food";
             });
             onChangedDDL(dropdownValue);
           },
