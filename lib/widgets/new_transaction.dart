@@ -17,6 +17,7 @@ class _NewTransactionState extends State<NewTransaction> {
   final _amountController = TextEditingController();
   String _selectedCategory = "Food";
   DateTime _selectedDate = DateTime.now();
+  bool _usedDefaultDate = true;
 
   void _submitData() {
     if (_amountController.text.isEmpty) {
@@ -46,11 +47,13 @@ class _NewTransactionState extends State<NewTransaction> {
           print("then: $pickedDate");
           _selectedDate = DateTime.now();
         });
+        _usedDefaultDate = true;
       } else {
         setState(() {
           print("else: $pickedDate");
           _selectedDate = pickedDate;
         });
+        _usedDefaultDate = false;
       }
     });
     print('...');
@@ -68,7 +71,7 @@ class _NewTransactionState extends State<NewTransaction> {
             TextField(
               decoration: InputDecoration(labelText: 'Title'),
               controller: _titleController,
-              onSubmitted: (_) => _submitData(),
+              onSubmitted: (_) => _usedDefaultDate ? null : _submitData(),
               // onChanged: (val) {
               //   titleInput = val;
               // },
@@ -77,7 +80,7 @@ class _NewTransactionState extends State<NewTransaction> {
               decoration: InputDecoration(labelText: 'Amount'),
               controller: _amountController,
               keyboardType: TextInputType.number,
-              onSubmitted: (_) => _submitData(),
+              onSubmitted: (_) => _usedDefaultDate ? null : _submitData(),
               // onChanged: (val) => amountInput = val,
             ),
             SizedBox(
