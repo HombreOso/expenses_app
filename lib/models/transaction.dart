@@ -48,8 +48,8 @@ class Transaction_ {
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
     final data = snapshot.data();
     return Transaction_(
-      id: snapshot.id,
-      title: data!['title'] as String?,
+      id: data!['id'] as String,
+      title: data['title'] as String?,
       amount: data['amount'] as double?,
       category: data['category'] as String?,
       date: (data['date'] as Timestamp).toDate(),

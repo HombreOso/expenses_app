@@ -8,6 +8,8 @@ import './widgets/new_transaction.dart';
 import './widgets/transaction_list.dart';
 import './widgets/chart.dart';
 import './models/transaction.dart';
+import 'screens/add_categories_screen.dart';
+import 'screens/auth_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -77,6 +79,11 @@ class MyApp extends StatelessWidget {
           color: Colors.amber,
         ),
       ),
+      routes: {
+        '/expenses': (context) => MyHomePage(),
+        '/categories': (context) => CategoryScreen(),
+        '/auth': (context) => AuthScreen(),
+      },
       home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (ctx, userSnapshot) {

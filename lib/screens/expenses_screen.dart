@@ -97,10 +97,14 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _deleteTransaction(String id, String uid) async {
+  void _deleteTransaction(
+    List<Transaction_> userTransactions,
+    String id,
+    String uid,
+  ) async {
     // Remove the transaction from the local list
     setState(() {
-      _userTransactions.removeWhere((tx) => tx.id == id);
+      userTransactions.removeWhere((tx) => tx.id == id);
     });
     print("Id: $id");
     print("Uid: $uid");
