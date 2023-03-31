@@ -103,9 +103,11 @@ class _MyHomePageState extends State<MyHomePage> {
     String uid,
   ) async {
     // Remove the transaction from the local list
-    setState(() {
-      userTransactions.removeWhere((tx) => tx.id == id);
-    });
+    //setState(() {
+    //userTransactions.removeWhere((tx) => tx.id == id);
+    //});
+
+    userTransactions.removeWhere((tx) => tx.id == id);
     print("Id: $id");
     print("Uid: $uid");
     // Get a reference to the Firestore document using the local transaction ID
