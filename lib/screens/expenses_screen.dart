@@ -150,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 80,
             ),
             iconStyleData: IconStyleData(
-              iconSize: 30,
+              //iconSize: 30,
               icon: Icon(
                 Icons.more_vert,
                 color: Theme.of(context).primaryIconTheme.color,
