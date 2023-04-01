@@ -191,6 +191,8 @@ class _MyHomePageState extends State<MyHomePage> {
             onChanged: (itemIdentifier) {
               if (itemIdentifier == 'logout') {
                 FirebaseAuth.instance.signOut();
+              } else if (itemIdentifier == 'categories') {
+                Navigator.pushNamed(context, '/categories');
               }
             },
           ),
