@@ -12,6 +12,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class MyHomePage extends StatefulWidget {
   // String titleInput;
@@ -138,24 +139,53 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.add),
             onPressed: () => _startAddNewTransaction(context),
           ),
-          DropdownButton(
+          DropdownButton2(
+            isExpanded: true,
+            alignment: Alignment.centerRight,
             underline: Container(),
-            icon: Icon(
-              Icons.more_vert,
-              color: Theme.of(context).primaryIconTheme.color,
+            dropdownStyleData: DropdownStyleData(
+              width: 200,
+            ),
+            buttonStyleData: ButtonStyleData(
+              width: 80,
+            ),
+            iconStyleData: IconStyleData(
+              iconSize: 30,
+              icon: Icon(
+                Icons.more_vert,
+                color: Theme.of(context).primaryIconTheme.color,
+              ),
             ),
             items: [
               DropdownMenuItem(
                 child: Container(
                   child: Row(
                     children: <Widget>[
-                      Icon(Icons.exit_to_app),
+                      Icon(
+                        Icons.exit_to_app,
+                        color: Theme.of(context).primaryColor,
+                      ),
                       SizedBox(width: 8),
                       Text('Logout'),
                     ],
                   ),
                 ),
                 value: 'logout',
+              ),
+              DropdownMenuItem(
+                child: Container(
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.featured_play_list_outlined,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      SizedBox(width: 8),
+                      Text('My Categories'),
+                    ],
+                  ),
+                ),
+                value: 'categories',
               ),
             ],
             onChanged: (itemIdentifier) {
