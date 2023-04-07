@@ -5,6 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../widgets/new_category.dart';
 import '../widgets/new_transaction.dart';
 import '../widgets/transaction_list.dart';
 import '../widgets/chart.dart';
@@ -24,6 +25,36 @@ class _CategoryScreenState extends State<CategoryScreen> {
       FirebaseFirestore.instance.collection('categories');
   String uid = FirebaseAuth.instance.currentUser!.uid.toString();
 
+  static Future<List<Category>> _fetchDataFromFirestore() async {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('categories').get();
+    final List<Category> loadedCategories =
+        snapshot.docs.map((doc) => Category.fromMap(doc.data())).toList();
+    return loadedCategories;
+  }
+
+  Future<void> _addNewCategory(
+    String ctName,
+    double ctAmount,
+  ) async {
+    final String categoryIdAsCurrentDateTime = DateTime.now().toString();
+    final newCt = Category(
+      name: ctName,
+      amount: ctAmount,
+      uid: uid,
+    );
+    setState(() {
+      categories.add(newCt);
+    });
+    // Write the transaction to Firebase
+    await categoriesCollectionRef.add({
+      'uid': uid,
+      'id': categoryIdAsCurrentDateTime,
+      'name': newCt.name,
+      'amount': newCt.amount,
+    });
+  }
+
   void _deleteCategory(String name, String uid) async {
     // Remove the transaction from the local list
     setState(() {
@@ -41,7 +72,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       await categoryDoc.delete();
     } catch (e) {
       // Handle errors
-      print('Failed to delete transaction: $e');
+      print('Failed to delete category: $e');
     }
   }
 
@@ -75,15 +106,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 CategoriesList(loadedCategories, _deleteCategory),
-                TextButton(
-                  onPressed: () {
-                    // Add the new category and close the dialog
-                    categories.length != 0
-                        ? Navigator.of(context).pushNamed('/expenses')
-                        : null;
-                  },
-                  child: Text('Done'),
-                ),
+                // TextButton(
+                //   onPressed: () {
+                //     // Add the new category and close the dialog
+                //     categories.length != 0
+                //         ? Navigator.of(context).pushNamed('/expenses')
+                //         : null;
+                //   },
+                //   child: Text('Done'),
+                // ),
               ],
             ),
           );
@@ -91,69 +122,21 @@ class _CategoryScreenState extends State<CategoryScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => _showAddCategoryDialog,
+        onPressed: () => _startAddNewCategory(context),
       ),
     );
   }
 
-  void _showAddCategoryDialog() async {
-    Category newCategory = Category(
-      name: "",
-      amount: 0,
-      uid: uid,
-    );
-    newCategory = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Add Category'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Category Name',
-                ),
-                onChanged: (value) {
-                  // Update the name of the new category as the user types
-                  newCategory.name = value;
-                },
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Amount',
-                ),
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  // Update the amount of the new category as the user types
-                  newCategory.amount = double.tryParse(value) ?? 0;
-                },
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Close the dialog without adding the new category
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                // Add the new category and close the dialog
-                Navigator.of(context).pop(newCategory);
-              },
-              child: Text('Add'),
-            ),
-          ],
+  void _startAddNewCategory(BuildContext ctx) {
+    showModalBottomSheet(
+      context: ctx,
+      builder: (_) {
+        return GestureDetector(
+          onTap: () {},
+          child: NewCategory(_addNewCategory),
+          behavior: HitTestBehavior.opaque,
         );
       },
     );
-
-    // If the user added a new category, add it to the list
-    setState(() {
-      categories.add(newCategory);
-    });
   }
 }
