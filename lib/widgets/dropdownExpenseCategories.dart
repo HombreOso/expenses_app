@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/models/category.dart';
 
 class DropdownButtonExample extends StatefulWidget {
   final Function(String) onChangedDDL;
@@ -45,34 +47,55 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
       ),
       child: Theme(
         data: Theme.of(context),
-        child: DropdownButton<String>(
-          value: dropdownValue,
-          dropdownColor: Theme.of(widget.ctx).primaryColor,
-          icon: Icon(
-            Icons.arrow_downward,
-            //color: Colors.amber,
-            color: Theme.of(widget.ctx).iconTheme.color,
-          ),
-          elevation: 16,
-          style: TextStyle(
-            color: Theme.of(widget.ctx).secondaryHeaderColor,
-            fontWeight: FontWeight.bold,
-            fontFamily: Theme.of(widget.ctx).textTheme.titleLarge!.fontFamily,
-          ),
-          onChanged: (String? value) {
-            // This is called when the user selects an item.
-            setState(() {
-              dropdownValue = value ?? "Food";
-            });
-            onChangedDDL(dropdownValue);
-          },
-          items: listExpenseCategories.map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ),
+        child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('categories')
+                .orderBy('amount', descending: true)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              final List<String> loadedCategoryNames = [];
+              final List<DocumentSnapshot<Map<String, dynamic>>> documents =
+                  snapshot.data!.docs
+                      .cast<DocumentSnapshot<Map<String, dynamic>>>();
+              documents.forEach((doc) {
+                final ctry = Category.fromSnapshot(doc);
+                loadedCategoryNames.add(ctry.name);
+              });
+              return DropdownButton<String>(
+                value: dropdownValue,
+                dropdownColor: Theme.of(widget.ctx).primaryColor,
+                icon: Icon(
+                  Icons.arrow_downward,
+                  //color: Colors.amber,
+                  color: Theme.of(widget.ctx).iconTheme.color,
+                ),
+                elevation: 16,
+                style: TextStyle(
+                  color: Theme.of(widget.ctx).secondaryHeaderColor,
+                  fontWeight: FontWeight.bold,
+                  fontFamily:
+                      Theme.of(widget.ctx).textTheme.titleLarge!.fontFamily,
+                ),
+                onChanged: (String? value) {
+                  // This is called when the user selects an item.
+                  setState(() {
+                    dropdownValue = value ?? loadedCategoryNames[0];
+                  });
+                  onChangedDDL(dropdownValue);
+                },
+                items: loadedCategoryNames.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              );
+            }),
       ),
     );
   }
