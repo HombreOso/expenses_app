@@ -57,9 +57,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   void _deleteCategory(String name, String uid) async {
     // Remove the transaction from the local list
-    setState(() {
-      categories.removeWhere((tx) => tx.name == name);
-    });
+
+    categories.removeWhere((tx) => tx.name == name);
+
     // Get a reference to the Firestore document using the local transaction ID
     final categoryDoc = await categoriesCollectionRef
         .where('uid', isEqualTo: uid)

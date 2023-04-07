@@ -44,7 +44,8 @@ class CategoriesList extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.all(6),
                         child: FittedBox(
-                          child: Text('\$${categories[index].amount}'),
+                          child: Text(
+                              '\$${categories[index].amount.toStringAsFixed(0)}'),
                         ),
                       ),
                     ),
