@@ -69,35 +69,54 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
                 final ctry = Category.fromSnapshot(doc);
                 loadedCategoryNames.add(ctry.name);
               });
-              return DropdownButton<String>(
-                value: dropdownValue,
-                dropdownColor: Theme.of(widget.ctx).primaryColor,
-                icon: Icon(
-                  Icons.arrow_downward,
-                  //color: Colors.amber,
-                  color: Theme.of(widget.ctx).iconTheme.color,
-                ),
-                elevation: 16,
-                style: TextStyle(
-                  color: Theme.of(widget.ctx).secondaryHeaderColor,
-                  fontWeight: FontWeight.bold,
-                  fontFamily:
-                      Theme.of(widget.ctx).textTheme.titleLarge!.fontFamily,
-                ),
-                onChanged: (String? value) {
-                  // This is called when the user selects an item.
-                  setState(() {
-                    dropdownValue = value ?? loadedCategoryNames[0];
-                  });
-                  onChangedDDL(dropdownValue);
-                },
-                items: loadedCategoryNames.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              );
+              return loadedCategoryNames.isEmpty
+                  ? TextButton(
+                      style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all(
+                            Theme.of(context).secondaryHeaderColor),
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).primaryColor),
+                      ),
+                      child: Text(
+                        'No Categories',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: () =>
+                          Navigator.pushNamed(context, '/categories'),
+                    )
+                  : DropdownButton<String>(
+                      value: dropdownValue,
+                      dropdownColor: Theme.of(widget.ctx).primaryColor,
+                      icon: Icon(
+                        Icons.arrow_downward,
+                        //color: Colors.amber,
+                        color: Theme.of(widget.ctx).iconTheme.color,
+                      ),
+                      elevation: 16,
+                      style: TextStyle(
+                        color: Theme.of(widget.ctx).secondaryHeaderColor,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: Theme.of(widget.ctx)
+                            .textTheme
+                            .titleLarge!
+                            .fontFamily,
+                      ),
+                      onChanged: (String? value) {
+                        // This is called when the user selects an item.
+                        setState(() {
+                          dropdownValue = value ?? loadedCategoryNames[0];
+                        });
+                        onChangedDDL(dropdownValue);
+                      },
+                      items: loadedCategoryNames.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    );
             }),
       ),
     );
