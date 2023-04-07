@@ -93,19 +93,34 @@ class _CategoryScreenState extends State<CategoryScreen> {
               child: CircularProgressIndicator(),
             );
           }
+
           final List<Category> loadedCategories = [];
+          //try {
           final List<DocumentSnapshot<Map<String, dynamic>>> documents =
               snapshot.data!.docs
                   .cast<DocumentSnapshot<Map<String, dynamic>>>();
-          documents.forEach((doc) {
-            final category = Category.fromSnapshot(doc);
-            loadedCategories.add(category);
-          });
+          documents.forEach(
+            (doc) {
+              final category = Category.fromSnapshot(doc);
+              loadedCategories.add(category);
+            },
+          );
+
+          // } catch (e) {
+          //   // Handle errors
+          //   print('No docs in collection categories: $e');
+          // }
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                CategoriesList(loadedCategories, _deleteCategory),
+                CategoriesList(
+                    loadedCategories
+                        .where(
+                          (tx) => tx.uid == uid,
+                        )
+                        .toList(),
+                    _deleteCategory),
                 // TextButton(
                 //   onPressed: () {
                 //     // Add the new category and close the dialog

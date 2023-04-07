@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/models/category.dart';
 
@@ -38,6 +39,8 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
 
   @override
   Widget build(BuildContext context) {
+    String uid = FirebaseAuth.instance.currentUser!.uid.toString();
+    print("uid dropdown $uid");
     return Container(
       height: 35,
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
