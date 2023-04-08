@@ -63,146 +63,156 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('categories')
-            .orderBy('amount', descending: true)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          final List<String> loadedCategoryNames = [];
-          final List<DocumentSnapshot<Map<String, dynamic>>> documents =
-              snapshot.data!.docs
-                  .cast<DocumentSnapshot<Map<String, dynamic>>>()
-                  .cast<DocumentSnapshot<Map<String, dynamic>>>();
-          documents.forEach((doc) {
-            final category = Category.fromSnapshot(doc);
-            loadedCategoryNames.add(category.name);
-          });
-
-          return Card(
-            elevation: 5,
-            child: Container(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+    return Card(
+      elevation: 5,
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            TextField(
+              decoration: InputDecoration(labelText: 'Title'),
+              controller: _titleController,
+              onSubmitted: (_) => _usedDefaultDate ? null : _submitData(),
+              // onChanged: (val) {
+              //   titleInput = val;
+              // },
+            ),
+            TextField(
+              decoration: InputDecoration(labelText: 'Amount'),
+              controller: _amountController,
+              keyboardType: TextInputType.number,
+              onSubmitted: (_) => _usedDefaultDate ? null : _submitData(),
+              // onChanged: (val) => amountInput = val,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            DropdownButtonExample(
+              onChangedDDL: (value) {
+                _selectedCategory = value;
+              },
+              ctx: context,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: 40,
+              child: Row(
                 children: <Widget>[
-                  TextField(
-                    decoration: InputDecoration(labelText: 'Title'),
-                    controller: _titleController,
-                    onSubmitted: (_) => _usedDefaultDate ? null : _submitData(),
-                    // onChanged: (val) {
-                    //   titleInput = val;
-                    // },
-                  ),
-                  TextField(
-                    decoration: InputDecoration(labelText: 'Amount'),
-                    controller: _amountController,
-                    keyboardType: TextInputType.number,
-                    onSubmitted: (_) => _usedDefaultDate ? null : _submitData(),
-                    // onChanged: (val) => amountInput = val,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  DropdownButtonExample(
-                    onChangedDDL: (value) {
-                      _selectedCategory = value;
-                    },
-                    ctx: context,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 40,
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(
-                            _selectedDate == null
-                                ? 'No Date Chosen!'
-                                : 'Picked Date: ${DateFormat.yMd().format(_selectedDate)}',
-                          ),
-                        ),
-                        TextButton(
-                          style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all(
-                                Theme.of(context).secondaryHeaderColor),
-                            backgroundColor: MaterialStateProperty.all(
-                                Theme.of(context).primaryColor),
-                          ),
-                          child: Text(
-                            'Choose Date',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          onPressed: _presentDatePicker,
-                        ),
-                      ],
+                  Expanded(
+                    child: Text(
+                      _selectedDate == null
+                          ? 'No Date Chosen!'
+                          : 'Picked Date: ${DateFormat.yMd().format(_selectedDate)}',
                     ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton(
+                  TextButton(
+                    style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all(
+                          Theme.of(context).secondaryHeaderColor),
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).primaryColor),
+                    ),
                     child: Text(
-                      'Add Transaction',
+                      'Choose Date',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all(
-                            Theme.of(context).secondaryHeaderColor),
-                        backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).primaryColor),
-                        textStyle: MaterialStateProperty.all(Theme.of(context)
-                            .textTheme
-                            .labelLarge!
-                            .copyWith(color: Colors.white)),
-                        // padding: MaterialStateProperty.all(
-                        //   EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                        // ),
-                        alignment: Alignment.center),
-                    onPressed: _submitData,
+                    onPressed: _presentDatePicker,
                   ),
-                  // SizedBox(
-                  //   height: 10,
-                  // ),
-                  if (!loadedCategoryNames.isEmpty)
-                    ElevatedButton(
-                      child: Text(
-                        'New Category',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all(
-                              Theme.of(context).secondaryHeaderColor),
-                          backgroundColor: MaterialStateProperty.all(
-                              Theme.of(context).primaryColor),
-                          textStyle: MaterialStateProperty.all(Theme.of(context)
-                              .textTheme
-                              .labelLarge!
-                              .copyWith(color: Colors.white)),
-                          padding: MaterialStateProperty.all(
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                          ),
-                          alignment: Alignment.center),
-                      onPressed: () =>
-                          Navigator.pushNamed(context, '/categories'),
-                    ),
                 ],
               ),
             ),
-          );
-        });
+            SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              child: Text(
+                'Add Transaction',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all(
+                      Theme.of(context).secondaryHeaderColor),
+                  backgroundColor:
+                      MaterialStateProperty.all(Theme.of(context).primaryColor),
+                  textStyle: MaterialStateProperty.all(Theme.of(context)
+                      .textTheme
+                      .labelLarge!
+                      .copyWith(color: Colors.white)),
+                  // padding: MaterialStateProperty.all(
+                  //   EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                  // ),
+                  alignment: Alignment.center),
+              onPressed: _submitData,
+            ),
+            StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('categories')
+                    .orderBy('amount', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  final List<String> loadedCategoryNames = [];
+                  final List<DocumentSnapshot<Map<String, dynamic>>> documents =
+                      snapshot.data!.docs
+                          .cast<DocumentSnapshot<Map<String, dynamic>>>()
+                          .cast<DocumentSnapshot<Map<String, dynamic>>>();
+                  documents.forEach((doc) {
+                    final category = Category.fromSnapshot(doc);
+                    loadedCategoryNames.add(category.name);
+                  });
+
+                  return Container(
+                    //padding: EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        // SizedBox(
+                        //   height: 10,
+                        // ),
+                        if (!loadedCategoryNames.isEmpty)
+                          ElevatedButton(
+                            child: Text(
+                              'New Category',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            style: ButtonStyle(
+                                foregroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).secondaryHeaderColor),
+                                backgroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).primaryColor),
+                                textStyle: MaterialStateProperty.all(
+                                    Theme.of(context)
+                                        .textTheme
+                                        .labelLarge!
+                                        .copyWith(color: Colors.white)),
+                                padding: MaterialStateProperty.all(
+                                  EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 0),
+                                ),
+                                alignment: Alignment.center),
+                            onPressed: () =>
+                                Navigator.pushNamed(context, '/categories'),
+                          ),
+                      ],
+                    ),
+                  );
+                }),
+          ],
+        ),
+      ),
+    );
   }
 }
