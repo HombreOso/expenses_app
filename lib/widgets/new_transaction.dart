@@ -166,15 +166,15 @@ class _NewTransactionState extends State<NewTransaction> {
                             .textTheme
                             .labelLarge!
                             .copyWith(color: Colors.white)),
-                        padding: MaterialStateProperty.all(
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                        ),
+                        // padding: MaterialStateProperty.all(
+                        //   EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                        // ),
                         alignment: Alignment.center),
                     onPressed: _submitData,
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  // SizedBox(
+                  //   height: 10,
+                  // ),
                   if (!loadedCategoryNames.isEmpty)
                     ElevatedButton(
                       child: Text(
