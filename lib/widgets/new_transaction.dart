@@ -7,16 +7,31 @@ import './dropdownExpenseCategories.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addTx;
+  final String initialAmountText;
+  final String initialTitleText;
 
-  NewTransaction(this.addTx);
+  NewTransaction(
+    this.addTx,
+    this.initialAmountText,
+    this.initialTitleText,
+  );
 
   @override
   _NewTransactionState createState() => _NewTransactionState();
 }
 
 class _NewTransactionState extends State<NewTransaction> {
-  final _titleController = TextEditingController();
-  final _amountController = TextEditingController();
+  var _amountController;
+  var _titleController;
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.initialTitleText);
+    _amountController = TextEditingController(text: widget.initialAmountText);
+  }
+
+  // final _titleController = TextEditingController();
+  // final _amountController = TextEditingController();
   String _selectedCategory = "Food";
   DateTime _selectedDate = DateTime.now();
   bool _usedDefaultDate = true;

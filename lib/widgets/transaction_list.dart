@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/widgets/new_transaction.dart';
 import 'package:intl/intl.dart';
 
 import '../models/transaction.dart';
@@ -8,6 +11,66 @@ class TransactionList extends StatelessWidget {
   final Function deleteTx;
 
   TransactionList(this.transactions, this.deleteTx);
+
+  static final CollectionReference transactionCollectionRef =
+      FirebaseFirestore.instance.collection('transactions');
+  String uid = FirebaseAuth.instance.currentUser!.uid.toString();
+
+  void _startUpdateNewTransaction(BuildContext ctx, NewTransaction newTx) {
+    showModalBottomSheet(
+      context: ctx,
+      builder: (_) {
+        return GestureDetector(
+          onTap: () {},
+          child: newTx,
+          behavior: HitTestBehavior.opaque,
+        );
+      },
+    );
+  }
+
+  Future<void> _updateNewTransaction(String txTitle, double txAmount,
+      DateTime chosenDate, String txCategory) async {
+    final String transactionIdAsCurrentDateTime = DateTime.now().toString();
+    final newTx = Transaction_(
+      title: txTitle,
+      amount: txAmount,
+      date: chosenDate,
+      id: transactionIdAsCurrentDateTime,
+      category: txCategory,
+      uid: uid,
+    );
+    print("update id $transactionIdAsCurrentDateTime");
+    // Write the transaction to Firebase
+    final uptodatedDoc = await transactionCollectionRef
+        .where(
+          'uid',
+          isEqualTo: uid,
+        )
+        .where(
+          'id',
+          isEqualTo: transactionIdAsCurrentDateTime,
+        )
+        .limit(1)
+        .get()
+        .then((QuerySnapshot snapshot) => snapshot.docs[0].reference);
+    uptodatedDoc.update({
+      'uid': uid,
+      'id': transactionIdAsCurrentDateTime,
+      'title': newTx.title,
+      'amount': newTx.amount,
+      'date': Timestamp.fromDate(newTx.date),
+      'category': newTx.category,
+    });
+    // add({
+    //   'uid': uid,
+    //   'id': transactionIdAsCurrentDateTime,
+    //   'title': newTx.title,
+    //   'amount': newTx.amount,
+    //   'date': Timestamp.fromDate(newTx.date),
+    //   'category': newTx.category,
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +114,10 @@ class TransactionList extends StatelessWidget {
                   ),
                   direction: DismissDirection.endToStart,
                   onDismissed: (direction) {
+                    print("Dismissed id: ${transactions[index].id}");
+                    print("Dismissed uid: ${transactions[index].uid}");
                     deleteTx(
+                      transactions,
                       transactions[index].id,
                       transactions[index].uid,
                     );
@@ -90,6 +156,15 @@ class TransactionList extends StatelessWidget {
                           onPressed: () {
                             // Handle edit transaction here
                             print('Edit transaction ${transactions[index].id}');
+                            _startUpdateNewTransaction(
+                              ctx,
+                              NewTransaction(
+                                _updateNewTransaction,
+                                transactions[index].amount.toString(),
+                                transactions[index].title,
+                              ),
+                            );
+                            //return NewTransaction(addTx, initialAmountText, initialTitleText)
                           },
                         ),
                       ),
