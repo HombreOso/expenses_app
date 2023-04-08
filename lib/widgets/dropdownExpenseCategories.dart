@@ -41,52 +41,51 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
   Widget build(BuildContext context) {
     String uid = FirebaseAuth.instance.currentUser!.uid.toString();
     print("uid dropdown $uid");
-    return Container(
-      height: 35,
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-      decoration: BoxDecoration(
-        color: Theme.of(widget.ctx).primaryColor,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Theme(
-        data: Theme.of(context),
-        child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('categories')
-                .orderBy('amount', descending: true)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              final List<String> loadedCategoryNames = [];
-              final List<DocumentSnapshot<Map<String, dynamic>>> documents =
-                  snapshot.data!.docs
-                      .cast<DocumentSnapshot<Map<String, dynamic>>>();
-              documents.forEach((doc) {
-                final ctry = Category.fromSnapshot(doc);
-                loadedCategoryNames.add(ctry.name);
-              });
-              return loadedCategoryNames.isEmpty
-                  ? TextButton(
-                      style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all(
-                            Theme.of(context).secondaryHeaderColor),
-                        backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).primaryColor),
-                      ),
-                      child: Text(
-                        'No Categories',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      onPressed: () =>
-                          Navigator.pushNamed(context, '/categories'),
-                    )
-                  : DropdownButton<String>(
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('categories')
+            .orderBy('amount', descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          final List<String> loadedCategoryNames = [];
+          final List<DocumentSnapshot<Map<String, dynamic>>> documents =
+              snapshot.data!.docs
+                  .cast<DocumentSnapshot<Map<String, dynamic>>>();
+          documents.forEach((doc) {
+            final ctry = Category.fromSnapshot(doc);
+            loadedCategoryNames.add(ctry.name);
+          });
+          return loadedCategoryNames.isEmpty
+              ? TextButton(
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all(
+                        Theme.of(context).secondaryHeaderColor),
+                    backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).unselectedWidgetColor),
+                  ),
+                  child: Text(
+                    'No Categories',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () => Navigator.pushNamed(context, '/categories'),
+                )
+              : Container(
+                  height: 35,
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                  decoration: BoxDecoration(
+                    color: Theme.of(widget.ctx).primaryColor,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Theme(
+                    data: Theme.of(context),
+                    child: DropdownButton<String>(
                       value: dropdownValue,
                       dropdownColor: Theme.of(widget.ctx).primaryColor,
                       icon: Icon(
@@ -116,9 +115,9 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
                           child: Text(value),
                         );
                       }).toList(),
-                    );
-            }),
-      ),
-    );
+                    ),
+                  ),
+                );
+        });
   }
 }

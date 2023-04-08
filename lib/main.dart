@@ -57,6 +57,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
         secondaryHeaderColor: Colors.amber,
+        unselectedWidgetColor: Colors.red,
 
         // errorColor: Colors.red,
         fontFamily: 'Quicksand',
