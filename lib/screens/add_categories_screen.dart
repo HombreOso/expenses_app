@@ -36,6 +36,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   Future<void> _addNewCategory(
     String ctName,
     double ctAmount,
+    String nameCurrentCt,
   ) async {
     final String categoryIdAsCurrentDateTime = DateTime.now().toString();
     final newCt = Category(
@@ -148,7 +149,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
       builder: (_) {
         return GestureDetector(
           onTap: () {},
-          child: NewCategory(_addNewCategory),
+          child: NewCategory(_addNewCategory, "", "", ""),
           behavior: HitTestBehavior.opaque,
         );
       },
