@@ -1,3 +1,6 @@
+import 'dart:core';
+import 'dart:core';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +32,15 @@ class TransactionList extends StatelessWidget {
     );
   }
 
-  Future<void> _updateNewTransaction(String txTitle, double txAmount,
-      DateTime chosenDate, String txCategory) async {
+  Future<void> _updateNewTransaction(
+    String txTitle,
+    double txAmount,
+    DateTime chosenDate,
+    String txCategory,
+    String txDateIdAsString,
+    bool usedDefaultDate,
+    DateTime txDate,
+  ) async {
     final String transactionIdAsCurrentDateTime = DateTime.now().toString();
     final newTx = Transaction_(
       title: txTitle,
@@ -40,7 +50,7 @@ class TransactionList extends StatelessWidget {
       category: txCategory,
       uid: uid,
     );
-    print("update id $transactionIdAsCurrentDateTime");
+    print("update id $txDateIdAsString");
     // Write the transaction to Firebase
     final uptodatedDoc = await transactionCollectionRef
         .where(
@@ -49,17 +59,19 @@ class TransactionList extends StatelessWidget {
         )
         .where(
           'id',
-          isEqualTo: transactionIdAsCurrentDateTime,
+          isEqualTo: txDateIdAsString,
         )
         .limit(1)
         .get()
         .then((QuerySnapshot snapshot) => snapshot.docs[0].reference);
     uptodatedDoc.update({
       'uid': uid,
-      'id': transactionIdAsCurrentDateTime,
+      'id': txDateIdAsString,
       'title': newTx.title,
       'amount': newTx.amount,
-      'date': Timestamp.fromDate(newTx.date),
+      'date': usedDefaultDate
+          ? Timestamp.fromDate(txDate)
+          : Timestamp.fromDate(newTx.date),
       'category': newTx.category,
     });
     // add({
@@ -159,10 +171,11 @@ class TransactionList extends StatelessWidget {
                             _startUpdateNewTransaction(
                               ctx,
                               NewTransaction(
-                                _updateNewTransaction,
-                                transactions[index].amount.toString(),
-                                transactions[index].title,
-                              ),
+                                  _updateNewTransaction,
+                                  transactions[index].amount.toString(),
+                                  transactions[index].title,
+                                  transactions[index].id,
+                                  transactions[index].date),
                             );
                             //return NewTransaction(addTx, initialAmountText, initialTitleText)
                           },

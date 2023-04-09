@@ -9,11 +9,15 @@ class NewTransaction extends StatefulWidget {
   final Function addTx;
   final String initialAmountText;
   final String initialTitleText;
+  final String txDateIdAsString;
+  final DateTime txDate;
 
   NewTransaction(
     this.addTx,
     this.initialAmountText,
     this.initialTitleText,
+    this.txDateIdAsString,
+    this.txDate,
   );
 
   @override
@@ -47,7 +51,15 @@ class _NewTransactionState extends State<NewTransaction> {
       return;
     }
 
-    widget.addTx(enteredTitle, enteredAmount, _selectedDate, _selectedCategory);
+    widget.addTx(
+      enteredTitle,
+      enteredAmount,
+      _selectedDate,
+      _selectedCategory,
+      widget.txDateIdAsString,
+      _usedDefaultDate,
+      widget.txDate,
+    );
 
     Navigator.of(context).pop();
   }
