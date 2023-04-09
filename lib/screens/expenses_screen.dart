@@ -60,8 +60,15 @@ class _MyHomePageState extends State<MyHomePage> {
         .toList();
   }
 
-  Future<void> _addNewTransaction(String txTitle, double txAmount,
-      DateTime chosenDate, String txCategory) async {
+  Future<void> _addNewTransaction(
+    String txTitle,
+    double txAmount,
+    DateTime chosenDate,
+    String txCategory,
+    String txDateIDAsString,
+    bool usedDefaultDate,
+    DateTime txDate,
+  ) async {
     final String transactionIdAsCurrentDateTime = DateTime.now().toString();
     final newTx = Transaction_(
       title: txTitle,
