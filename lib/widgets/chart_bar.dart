@@ -4,8 +4,16 @@ class ChartBar extends StatelessWidget {
   final String? label;
   final double? spendingAmount;
   final double spendingPctOfTotal;
+  final String percentageSpent;
+  final String remainder;
 
-  ChartBar(this.label, this.spendingAmount, this.spendingPctOfTotal);
+  ChartBar(
+    this.label,
+    this.spendingAmount,
+    this.spendingPctOfTotal,
+    this.percentageSpent,
+    this.remainder,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +23,12 @@ class ChartBar extends StatelessWidget {
           height: 20,
           child: FittedBox(
             child: Text('\$${spendingAmount!.toStringAsFixed(0)}'),
+          ),
+        ),
+        Container(
+          height: 20,
+          child: FittedBox(
+            child: Text('\%${percentageSpent}'),
           ),
         ),
         SizedBox(
@@ -33,7 +47,7 @@ class ChartBar extends StatelessWidget {
                 ),
               ),
               FractionallySizedBox(
-                heightFactor: spendingPctOfTotal,
+                heightFactor: double.parse(percentageSpent) / 100,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
@@ -48,6 +62,10 @@ class ChartBar extends StatelessWidget {
           height: 4,
         ),
         Text(label!),
+        SizedBox(
+          height: 4,
+        ),
+        Text('\$${remainder}'),
       ],
     );
   }

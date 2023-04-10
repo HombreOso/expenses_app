@@ -52,14 +52,23 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
               child: CircularProgressIndicator(),
             );
           }
-          final List<String> loadedCategoryNames = [];
+          final List<Category> loadedCategories = [];
           final List<DocumentSnapshot<Map<String, dynamic>>> documents =
               snapshot.data!.docs
                   .cast<DocumentSnapshot<Map<String, dynamic>>>();
           documents.forEach((doc) {
             final ctry = Category.fromSnapshot(doc);
-            loadedCategoryNames.add(ctry.name);
+            loadedCategories.add(ctry);
           });
+          List<Category> loadedCategoryCurrentUser = loadedCategories
+              .where(
+                (element) => element.uid == uid,
+              )
+              .toList();
+          List<String> loadedCategoryNames = [
+            for (var x in loadedCategoryCurrentUser) x.name
+          ];
+          print("loadedCategoryNames: $loadedCategoryNames");
           return loadedCategoryNames.isEmpty
               ? TextButton(
                   style: ButtonStyle(
@@ -85,37 +94,39 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
                   ),
                   child: Theme(
                     data: Theme.of(context),
-                    child: DropdownButton<String>(
-                      value: dropdownValue,
-                      dropdownColor: Theme.of(widget.ctx).primaryColor,
-                      icon: Icon(
-                        Icons.arrow_downward,
-                        //color: Colors.amber,
-                        color: Theme.of(widget.ctx).iconTheme.color,
-                      ),
-                      elevation: 16,
-                      style: TextStyle(
-                        color: Theme.of(widget.ctx).secondaryHeaderColor,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: Theme.of(widget.ctx)
-                            .textTheme
-                            .titleLarge!
-                            .fontFamily,
-                      ),
-                      onChanged: (String? value) {
-                        // This is called when the user selects an item.
-                        setState(() {
-                          dropdownValue = value ?? loadedCategoryNames[0];
-                        });
-                        onChangedDDL(dropdownValue);
-                      },
-                      items: loadedCategoryNames.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
+                    child: !loadedCategoryNames.isEmpty
+                        ? DropdownButton<String>(
+                            value: loadedCategoryNames[0],
+                            dropdownColor: Theme.of(widget.ctx).primaryColor,
+                            icon: Icon(
+                              Icons.arrow_downward,
+                              //color: Colors.amber,
+                              color: Theme.of(widget.ctx).iconTheme.color,
+                            ),
+                            elevation: 16,
+                            style: TextStyle(
+                              color: Theme.of(widget.ctx).secondaryHeaderColor,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: Theme.of(widget.ctx)
+                                  .textTheme
+                                  .titleLarge!
+                                  .fontFamily,
+                            ),
+                            onChanged: (String? value) {
+                              // This is called when the user selects an item.
+                              setState(() {
+                                dropdownValue = value ?? loadedCategoryNames[0];
+                              });
+                              onChangedDDL(dropdownValue);
+                            },
+                            items: loadedCategoryNames.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          )
+                        : Text('No categories defined'),
                   ),
                 );
         });

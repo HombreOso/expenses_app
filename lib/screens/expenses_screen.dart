@@ -60,6 +60,19 @@ class _MyHomePageState extends State<MyHomePage> {
         .toList();
   }
 
+  List<Transaction_> _currentMonthTransactions(
+      List<Transaction_> userTransactions_passed) {
+    return userTransactions_passed
+        .where((tx) {
+          return tx.date.month ==
+              DateTime.now().month; //  transactions in the last 31 days
+        })
+        .where(
+          (tx) => tx.uid == uid,
+        )
+        .toList();
+  }
+
   Future<void> _addNewTransaction(
     String txTitle,
     double txAmount,
@@ -235,9 +248,8 @@ class _MyHomePageState extends State<MyHomePage> {
               // mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Chart(_recentTransactions(
+                Chart(_currentMonthTransactions(
                   loadedTransactions,
-                  observationDaysNumberWeek,
                 )),
                 TransactionList(
                   _recentTransactions(
