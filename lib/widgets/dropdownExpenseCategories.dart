@@ -117,7 +117,15 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
                                         .map((String value) {
                                       return PopupMenuItem<String>(
                                         value: value,
-                                        child: Text(value),
+                                        child: Text(
+                                          value,
+                                          style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontFamily: 'OpenSans',
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       );
                                     }).toList();
                                   },
