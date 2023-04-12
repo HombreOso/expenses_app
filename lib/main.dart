@@ -55,6 +55,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Personal Expenses',
       theme: ThemeData(
+        useMaterial3: true,
         primarySwatch: Colors.purple,
         secondaryHeaderColor: Colors.amber,
         unselectedWidgetColor: Colors.red,

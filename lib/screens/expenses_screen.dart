@@ -179,7 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
               //iconSize: 30,
               icon: Icon(
                 Icons.more_vert,
-                color: Theme.of(context).primaryIconTheme.color,
+                color: Theme.of(context).primaryColor,
               ),
             ),
             items: [

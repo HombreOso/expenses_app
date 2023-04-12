@@ -113,7 +113,7 @@ class _NewTransactionState extends State<NewTransaction> {
               // onChanged: (val) => amountInput = val,
             ),
             SizedBox(
-              height: 100,
+              height: 20,
             ),
             DropdownButtonExample(
               onChangedDDL: (value) {
