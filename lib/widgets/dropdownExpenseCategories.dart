@@ -25,11 +25,12 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
     "Gadgets",
     "Others",
   ];
+  String dropdownValue = "";
   // ignore: todo
   // TODO screen where this categories can be specified by user
   Function(String) onChangedDDL;
-  String dropdownValue =
-      "Food"; // dropdownValue is initialized to a value contained in the listExpenseCategories
+  // String dropdownValue =
+  //     "Food"; // dropdownValue is initialized to a value contained in the listExpenseCategories
   // ToDo: make the category "Food" be set by default, so that user only has to type the cost and hit "Add" button
   // Current behaviour: if the category is not set, the entry has only cost value and empty string instead of "Food"
 
@@ -69,6 +70,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
             for (var x in loadedCategoryCurrentUser) x.name
           ];
           print("loadedCategoryNames: $loadedCategoryNames");
+
           return loadedCategoryNames.isEmpty
               ? TextButton(
                   style: ButtonStyle(
@@ -85,49 +87,54 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
                   ),
                   onPressed: () => Navigator.pushNamed(context, '/categories'),
                 )
-              : Container(
-                  height: 35,
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                  decoration: BoxDecoration(
-                    color: Theme.of(widget.ctx).primaryColor,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Theme(
-                    data: Theme.of(context),
-                    child: !loadedCategoryNames.isEmpty
-                        ? DropdownButton<String>(
-                            value: loadedCategoryNames[0],
-                            dropdownColor: Theme.of(widget.ctx).primaryColor,
-                            icon: Icon(
-                              Icons.arrow_downward,
-                              //color: Colors.amber,
-                              color: Theme.of(widget.ctx).iconTheme.color,
-                            ),
-                            elevation: 16,
-                            style: TextStyle(
-                              color: Theme.of(widget.ctx).secondaryHeaderColor,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: Theme.of(widget.ctx)
-                                  .textTheme
-                                  .titleLarge!
-                                  .fontFamily,
-                            ),
-                            onChanged: (String? value) {
-                              // This is called when the user selects an item.
-                              setState(() {
-                                dropdownValue = value ?? loadedCategoryNames[0];
-                              });
-                              onChangedDDL(dropdownValue);
-                            },
-                            items: loadedCategoryNames.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          )
-                        : Text('No categories defined'),
-                  ),
+              : Theme(
+                  data: Theme.of(context),
+                  child: !loadedCategoryNames.isEmpty
+                      ? Container(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: dropdownValue == ''
+                                    ? Text(loadedCategoryNames[0])
+                                    : Text('$dropdownValue'),
+                              ),
+                              Container(
+                                height: 35,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 0),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(widget.ctx).primaryColor,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: PopupMenuButton<String>(
+                                  tooltip: "category",
+                                  icon: Icon(
+                                    Icons.category,
+                                  ),
+                                  initialValue: dropdownValue,
+                                  itemBuilder: (BuildContext context) {
+                                    return loadedCategoryNames
+                                        .map((String value) {
+                                      return PopupMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList();
+                                  },
+                                  onSelected: (String? value) {
+                                    if (value != null) {
+                                      setState(() {
+                                        dropdownValue = value;
+                                      });
+                                      onChangedDDL(dropdownValue);
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Text('No categories defined'),
                 );
         });
   }
