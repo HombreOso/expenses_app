@@ -43,6 +43,7 @@ class Chart extends StatelessWidget {
     List<Category> allCategories,
   ) {
     return List.generate(allCategories.length, (index) {
+      allCategories.sort((a, b) => a.amount.compareTo(b.amount));
       final cat_name = allCategories[index].name;
       var totalSum = 0.0;
 
