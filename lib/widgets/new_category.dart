@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../models/category.dart';
 import './dropdownExpenseCategories.dart';
 
 class NewCategory extends StatefulWidget {
@@ -23,6 +26,19 @@ class _NewCategoryState extends State<NewCategory> {
     super.initState();
     _titleController = TextEditingController(text: widget.nameCt);
     _amountController = TextEditingController(text: widget.amountCt);
+  }
+
+  String uid = FirebaseAuth.instance.currentUser!.uid.toString();
+
+  Future<List<String>> get namesOfCategories async {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('categories').get();
+    final List<Category> loadedCategories = snapshot.docs
+        .map((doc) => Category.fromMap(doc.data()))
+        .toList()
+        .where((cat) => cat.uid == uid)
+        .toList();
+    return await loadedCategories.map((e) => e.name as String).toList();
   }
 
   String _selectedCategory = "Food";
@@ -92,7 +108,28 @@ class _NewCategoryState extends State<NewCategory> {
                     EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                   ),
                   alignment: Alignment.center),
-              onPressed: _submitData,
+              onPressed: () async => (await namesOfCategories)
+                      .contains(_selectedCategory)
+                  ? {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Category already exists'),
+                          content: const Text('Category name already exists'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'Cancel'),
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'OK'),
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      )
+                    }
+                  : _submitData,
             ),
           ],
         ),

@@ -33,6 +33,17 @@ class _CategoryScreenState extends State<CategoryScreen> {
     return loadedCategories;
   }
 
+  Future<int> get numberOfCategories async {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('categories').get();
+    final List<Category> loadedCategories = snapshot.docs
+        .map((doc) => Category.fromMap(doc.data()))
+        .toList()
+        .where((cat) => cat.uid == uid)
+        .toList();
+    return await loadedCategories.length;
+  }
+
   Future<void> _addNewCategory(
     String ctName,
     double ctAmount,
@@ -138,7 +149,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => _startAddNewCategory(context),
+        onPressed: () async => await numberOfCategories >= 5
+            ? ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("5 categories are maximal"),
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                ),
+              )
+            : _startAddNewCategory(context),
       ),
     );
   }
