@@ -67,7 +67,14 @@ class ChartBar extends StatelessWidget {
         SizedBox(
           height: 4,
         ),
-        Text('\$${remainder}'),
+        Text(
+          '\$${remainder}',
+          style: double.parse(remainder) < 0
+              ? TextStyle(color: Colors.red)
+              : TextStyle(
+                  color: Colors.black,
+                ),
+        )
       ],
     );
   }
