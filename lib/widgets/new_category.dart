@@ -41,21 +41,21 @@ class _NewCategoryState extends State<NewCategory> {
     return await loadedCategories.map((e) => e.name as String).toList();
   }
 
-  String _selectedCategory = "Food";
-  DateTime _selectedDate = DateTime.now();
   bool _usedDefaultDate = true;
 
-  void _submitData() {
+  Future<void> _submitData() async {
     if (_amountController.text.isEmpty) {
       return;
     }
-    final enteredTitle = _titleController.text;
+    var enteredTitle = _titleController.text;
     final enteredAmount = double.parse(_amountController.text);
 
     if (enteredTitle.isEmpty || enteredAmount <= 0) {
       return;
     }
-
+    if ((await namesOfCategories).contains(enteredTitle)) {
+      enteredTitle += "_";
+    }
     widget.addCt(enteredTitle, enteredAmount, "");
 
     Navigator.of(context).pop();
@@ -108,28 +108,7 @@ class _NewCategoryState extends State<NewCategory> {
                     EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                   ),
                   alignment: Alignment.center),
-              onPressed: () async => (await namesOfCategories)
-                      .contains(_selectedCategory)
-                  ? {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Category already exists'),
-                          content: const Text('Category name already exists'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'OK'),
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ),
-                      )
-                    }
-                  : _submitData,
+              onPressed: _submitData,
             ),
           ],
         ),

@@ -159,8 +159,18 @@ class TransactionList extends StatelessWidget {
                           transactions[index].title,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
-                        subtitle: Text(
-                          DateFormat.yMMMd().format(transactions[index].date),
+                        subtitle: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              DateFormat.yMMMd()
+                                  .format(transactions[index].date),
+                            ),
+                            Text(
+                              transactions[index].category,
+                            ),
+                          ],
                         ),
                         trailing: IconButton(
                           icon: Icon(Icons.edit),
