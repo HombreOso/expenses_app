@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class ChartBar extends StatelessWidget {
@@ -47,7 +49,7 @@ class ChartBar extends StatelessWidget {
                 ),
               ),
               FractionallySizedBox(
-                heightFactor: double.parse(percentageSpent) / 100,
+                heightFactor: min(double.parse(percentageSpent) / 100, 1),
                 child: Container(
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
