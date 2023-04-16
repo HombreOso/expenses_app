@@ -18,21 +18,10 @@ class DropdownButtonExample extends StatefulWidget {
 }
 
 class _DropdownButtonExampleState extends State<DropdownButtonExample> {
-  final List<String> listExpenseCategories = const <String>[
-    "Food",
-    "Amazon",
-    "Education",
-    "Gadgets",
-    "Others",
-  ];
   String dropdownValue = "";
   // ignore: todo
   // TODO screen where this categories can be specified by user
   Function(String) onChangedDDL;
-  // String dropdownValue =
-  //     "Food"; // dropdownValue is initialized to a value contained in the listExpenseCategories
-  // ToDo: make the category "Food" be set by default, so that user only has to type the cost and hit "Add" button
-  // Current behaviour: if the category is not set, the entry has only cost value and empty string instead of "Food"
 
   _DropdownButtonExampleState({
     required this.onChangedDDL,
