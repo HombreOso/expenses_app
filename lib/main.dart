@@ -10,6 +10,7 @@ import './widgets/chart.dart';
 import './models/transaction.dart';
 import 'screens/add_categories_screen.dart';
 import 'screens/auth_screen.dart';
+import 'screens/forgot_password_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -85,6 +86,7 @@ class MyApp extends StatelessWidget {
         '/expenses': (context) => MyHomePage(),
         '/categories': (context) => CategoryScreen(),
         '/auth': (context) => AuthScreen(),
+        '/forgot_password': (context) => ForgotPassword()
       },
       home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
