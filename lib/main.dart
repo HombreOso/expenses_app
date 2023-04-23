@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/screens/auth_screen.dart';
+import 'package:flutter_complete_guide/screens/confirm_email_screen.dart';
 import 'package:flutter_complete_guide/screens/splash_screen.dart';
 
 import '../screens/expenses_screen.dart';
@@ -11,6 +12,7 @@ import './models/transaction.dart';
 import 'screens/add_categories_screen.dart';
 import 'screens/auth_screen.dart';
 import 'screens/forgot_password_screen.dart';
+import 'screens/confirm_email_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -85,8 +87,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/expenses': (context) => MyHomePage(),
         '/categories': (context) => CategoryScreen(),
-        '/auth': (context) => AuthScreen(),
-        '/forgot_password': (context) => ForgotPassword()
+        '/auth': (context) => AuthPage(),
+        '/reset_password': (context) => ResetPasswordScreen(),
+        '/confirm_email': (context) => EmailVerificationScreen(),
       },
       home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
@@ -97,7 +100,7 @@ class MyApp extends StatelessWidget {
             if (userSnapshot.hasData) {
               return MyHomePage();
             }
-            return AuthScreen();
+            return AuthPage();
           }),
     );
   }

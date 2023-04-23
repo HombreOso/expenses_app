@@ -1,91 +1,135 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
+import '../firebase_constants.dart';
+import './confirm_email_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 
-import 'package:flutter_complete_guide/widgets/auth/auth_form.dart';
+class AuthPage extends StatefulWidget {
+  const AuthPage({Key? key}) : super(key: key);
 
-class AuthScreen extends StatefulWidget {
   @override
-  _AuthScreenState createState() => _AuthScreenState();
+  State<AuthPage> createState() => _AuthPageState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
-  final _auth = FirebaseAuth.instance;
-  var _isLoading = false;
+class _AuthPageState extends State<AuthPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
 
-  void _submitAuthForm(
-    String email,
-    String password,
-    String username,
-    bool isLogin,
-    BuildContext ctx,
-  ) async {
-    UserCredential authResult;
-
+  static Future<User?> signUp(
+      {required String userEmail,
+      required String password,
+      required BuildContext context}) async {
     try {
-      setState(() {
-        _isLoading = true;
-      });
-      if (isLogin) {
-        authResult = await _auth.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-      } else {
-        authResult = await _auth.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-
-        final ref = FirebaseStorage.instance
-            .ref()
-            .child('user_image')
-            .child(authResult.user!.uid + '.jpg');
-
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(authResult.user!.uid)
-            .set({
-          'username': username,
-          'email': email,
-        });
-        String userID = authResult.user!.uid;
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: userEmail, password: password);
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('The password provided is too weak.')));
+      } else if (e.code == 'email-already-in-use') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('The account already exists for that email.')));
       }
-    } on PlatformException catch (err) {
-      var message = 'An error occurred, please check your credentials!';
-
-      if (err.message != null) {
-        message = err.message!;
-      }
-
-      ScaffoldMessenger.of(ctx).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: Theme.of(ctx).colorScheme.error,
-        ),
-      );
-      setState(() {
-        _isLoading = false;
-      });
-    } catch (err) {
-      print(err);
-      setState(() {
-        _isLoading = false;
-      });
+      return null;
+    } catch (e) {
+      debugPrint(e.toString());
+      return null;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      body: AuthForm(
-        _submitAuthForm,
-        _isLoading,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextFormField(
+                controller: _emailController,
+                // validator: (val) => widget.onValidate(val),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Colors.grey, width: 1),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Colors.grey, width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Colors.grey, width: 1),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: 'Enter Email',
+                  // hintStyle: AppTextStyle.lightGreyText,
+                  isDense: true,
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Colors.grey, width: 1),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Colors.grey, width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Colors.grey, width: 1),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: 'Enter Password',
+                  // hintStyle: AppTextStyle.lightGreyText,
+                  isDense: true,
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+                ),
+                obscureText: true,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              _isLoading
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        await signUp(
+                            userEmail: _emailController.text,
+                            password: _passwordController.text,
+                            context: context);
+                        if (auth.currentUser != null) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (ctx) =>
+                                      const EmailVerificationScreen()));
+                        }
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      },
+                      child: const Text('Sign Up'))
+            ],
+          ),
+        ),
       ),
     );
   }

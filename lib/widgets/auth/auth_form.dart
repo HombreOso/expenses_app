@@ -1,10 +1,13 @@
 import 'dart:io';
 
 //import 'package:cross_file/src/types/interface.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_complete_guide/widgets/pickers/user_image_picker.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../screens/forgot_password_screen.dart';
 
 class AuthForm extends StatefulWidget {
   AuthForm(
@@ -47,6 +50,29 @@ class _AuthFormState extends State<AuthForm> {
         _isLogin,
         context,
       );
+    }
+  }
+
+  static Future<User?> signUp(
+      {required String userEmail,
+      required String password,
+      required BuildContext context}) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: userEmail, password: password);
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('The password provided is too weak.')));
+      } else if (e.code == 'email-already-in-use') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('The account already exists for that email.')));
+      }
+      return null;
+    } catch (e) {
+      debugPrint(e.toString());
+      return null;
     }
   }
 
@@ -134,7 +160,19 @@ class _AuthFormState extends State<AuthForm> {
                           _isLogin = !_isLogin;
                         });
                       },
-                    )
+                    ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        ResetPasswordScreen.id,
+                      );
+                    },
+                    child: Text(
+                      'Forgot Password?',
+                      style: TextStyle(color: Colors.blueAccent, fontSize: 12),
+                    ),
+                  ),
                 ],
               ),
             ),
