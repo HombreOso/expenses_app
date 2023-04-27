@@ -93,7 +93,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: Colors.amber),
+                        color: Colors.black),
                     decoration: const InputDecoration(
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -129,7 +129,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       hintStyle: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
-                          color: Colors.lightGreen),
+                          color: Colors.black),
                     ),
                   ),
                 ),
@@ -147,9 +147,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           final _status = await resetPassword(
                               email: _emailController.text.trim());
                           if (_status == AuthStatus.successful) {
-                            //your logic
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Email has been sent"),
+                            ));
                           } else {
                             //your logic or show snackBar with error message
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text("Email does not exist. Please sign up"),
+                            ));
                           }
                         }
                       },

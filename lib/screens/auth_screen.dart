@@ -11,9 +11,12 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   bool _isLoading = false;
+  bool _isLogin = true;
 
   static Future<User?> signUp(
       {required String userEmail,
@@ -38,6 +41,26 @@ class _AuthPageState extends State<AuthPage> {
     }
   }
 
+  static Future<void> signIn(
+      {required String emailAddress,
+      required String password,
+      required BuildContext context}) async {
+    try {
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: emailAddress, password: password);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('No user found for that email.')));
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Wrong password provided for that user.')));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +72,7 @@ class _AuthPageState extends State<AuthPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
+                key: Key("email"),
                 controller: _emailController,
                 // validator: (val) => widget.onValidate(val),
                 decoration: InputDecoration(
@@ -77,6 +101,7 @@ class _AuthPageState extends State<AuthPage> {
                 height: 20,
               ),
               TextFormField(
+                key: Key("password"),
                 controller: _passwordController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -104,6 +129,42 @@ class _AuthPageState extends State<AuthPage> {
               const SizedBox(
                 height: 20,
               ),
+              !_isLogin
+                  ? TextFormField(
+                      key: Key("username"),
+                      controller: _usernameController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide:
+                              const BorderSide(color: Colors.grey, width: 1),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide:
+                              const BorderSide(color: Colors.grey, width: 1),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide:
+                              const BorderSide(color: Colors.grey, width: 1),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: 'Enter Username',
+                        // hintStyle: AppTextStyle.lightGreyText,
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 15),
+                      ),
+                      obscureText: true,
+                    )
+                  : const SizedBox(
+                      height: 1,
+                    ),
+              const SizedBox(
+                height: 20,
+              ),
               _isLoading
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
@@ -111,11 +172,17 @@ class _AuthPageState extends State<AuthPage> {
                         setState(() {
                           _isLoading = true;
                         });
-                        await signUp(
-                            userEmail: _emailController.text,
-                            password: _passwordController.text,
-                            context: context);
-                        if (auth.currentUser != null) {
+                        _isLogin
+                            ? await signIn(
+                                emailAddress: _emailController.text,
+                                password: _passwordController.text,
+                                context: context,
+                              )
+                            : await signUp(
+                                userEmail: _emailController.text,
+                                password: _passwordController.text,
+                                context: context);
+                        if (auth.currentUser != null && !_isLogin) {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -126,7 +193,23 @@ class _AuthPageState extends State<AuthPage> {
                           _isLoading = false;
                         });
                       },
-                      child: const Text('Sign Up'))
+                      child: Text(_isLogin ? 'Sign In' : 'Sign Up')),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _isLogin = !_isLogin;
+                  });
+                },
+                child: Text(_isLogin
+                    ? 'Create new account'
+                    : 'I already have an account'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed("/reset_password");
+                },
+                child: Text('Forgot password?'),
+              )
             ],
           ),
         ),
