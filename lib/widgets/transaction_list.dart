@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/widgets/new_transaction.dart';
 import 'package:intl/intl.dart';
 
+import '../models/category.dart';
 import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
@@ -30,6 +31,17 @@ class TransactionList extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<int> get numberOfCategories async {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('categories').get();
+    final List<Category> loadedCategories = snapshot.docs
+        .map((doc) => Category.fromMap(doc.data()))
+        .toList()
+        .where((cat) => cat.uid == uid)
+        .toList();
+    return await loadedCategories.length;
   }
 
   Future<void> _updateNewTransaction(
@@ -91,10 +103,62 @@ class TransactionList extends StatelessWidget {
       child: transactions.isEmpty
           ? Column(
               children: <Widget>[
-                Text(
-                  'No transactions added yet!',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
+                StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('categories')
+                        .orderBy('amount', descending: true)
+                        .snapshots(),
+                    builder: (ctx, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      final List<Category> loadedCategories = [];
+                      //try {
+                      final List<DocumentSnapshot<Map<String, dynamic>>>
+                          documents = snapshot.data!.docs
+                              .cast<DocumentSnapshot<Map<String, dynamic>>>();
+                      documents.forEach(
+                        (doc) {
+                          final category = Category.fromSnapshot(doc);
+                          loadedCategories.add(category);
+                        },
+                      );
+                      return loadedCategories
+                                  .where((categ) => categ.uid == uid)
+                                  .length !=
+                              0
+                          ? Text(
+                              'No transactions added yet!',
+                              style: Theme.of(context).textTheme.titleLarge,
+                            )
+                          : ElevatedButton(
+                              onPressed: () => Navigator.of(context)
+                                  .pushNamed('/categories'),
+                              child: Text(
+                                'Please add categories first',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              style: ButtonStyle(
+                                  foregroundColor: MaterialStateProperty.all(
+                                      Theme.of(context).secondaryHeaderColor),
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Theme.of(context).primaryColor),
+                                  textStyle: MaterialStateProperty.all(
+                                      Theme.of(context)
+                                          .textTheme
+                                          .labelLarge!
+                                          .copyWith(color: Colors.white)),
+                                  // padding: MaterialStateProperty.all(
+                                  //   EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                                  // ),
+                                  alignment: Alignment.center),
+                            );
+                    }),
                 SizedBox(
                   height: 20,
                 ),

@@ -248,9 +248,13 @@ class _MyHomePageState extends State<MyHomePage> {
               // mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Chart(_currentMonthTransactions(
-                  loadedTransactions,
-                )),
+                loadedTransactions.where((tx) => tx.uid == uid).isEmpty
+                    ? SizedBox(
+                        height: 20,
+                      )
+                    : Chart(_currentMonthTransactions(
+                        loadedTransactions,
+                      )),
                 TransactionList(
                   _recentTransactions(
                     loadedTransactions,
