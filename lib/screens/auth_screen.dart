@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../firebase_constants.dart';
 import './confirm_email_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,13 +20,21 @@ class _AuthPageState extends State<AuthPage> {
   bool _isLoading = false;
   bool _isLogin = true;
 
-  static Future<User?> signUp(
+  Future<User?> signUp(
       {required String userEmail,
       required String password,
       required BuildContext context}) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: userEmail, password: password);
+      final CollectionReference usersCollectionRef =
+          FirebaseFirestore.instance.collection('users');
+      usersCollectionRef.add(
+        {
+          'username': _usernameController.text.trim(),
+          'email': _emailController.text.trim(),
+        },
+      );
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
