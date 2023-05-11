@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'dart:core';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,7 +17,7 @@ class TransactionList extends StatelessWidget {
 
   static final CollectionReference transactionCollectionRef =
       FirebaseFirestore.instance.collection('transactions');
-  String uid = FirebaseAuth.instance.currentUser!.uid.toString();
+  final String uid = FirebaseAuth.instance.currentUser!.uid.toString();
 
   void _startUpdateNewTransaction(BuildContext ctx, NewTransaction newTx) {
     showModalBottomSheet(

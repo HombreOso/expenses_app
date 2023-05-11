@@ -11,7 +11,7 @@ class CategoriesList extends StatelessWidget {
 
   CategoriesList(this.categories, this.deleteCat);
 
-  String uid = FirebaseAuth.instance.currentUser!.uid.toString();
+  final String uid = FirebaseAuth.instance.currentUser!.uid.toString();
   static final CollectionReference categoriesCollectionRef =
       FirebaseFirestore.instance.collection('categories');
 
