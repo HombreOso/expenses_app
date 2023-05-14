@@ -22,6 +22,9 @@ class _AuthPageState extends State<AuthPage> {
   bool _isLoading = false;
   bool _isLogin = true;
 
+  bool _passwordVisible = false;
+  bool _usernameVisible = true;
+
   Future<User?> signUp(
       {required String userEmail,
       required String password,
@@ -133,10 +136,23 @@ class _AuthPageState extends State<AuthPage> {
                   hintText: 'Enter Password',
                   // hintStyle: AppTextStyle.lightGreyText,
                   isDense: true,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.blueAccent,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                      });
+                    },
+                  ),
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
                 ),
-                obscureText: true,
+                obscureText: !_passwordVisible,
               ),
               const SizedBox(
                 height: 20,
@@ -164,12 +180,25 @@ class _AuthPageState extends State<AuthPage> {
                         filled: true,
                         fillColor: Colors.white,
                         hintText: 'Enter Username',
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _usernameVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.blueAccent,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _usernameVisible = !_usernameVisible;
+                            });
+                          },
+                        ),
                         // hintStyle: AppTextStyle.lightGreyText,
                         isDense: true,
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 15),
                       ),
-                      obscureText: true,
+                      obscureText: !_usernameVisible,
                     )
                   : const SizedBox(
                       height: 1,
