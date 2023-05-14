@@ -42,6 +42,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     String ctName,
     double ctAmount,
     String nameCurrentCt,
+    String id,
   ) async {
     final String categoryIdAsCurrentDateTime = DateTime.now().toString();
     final newCt = Category(
